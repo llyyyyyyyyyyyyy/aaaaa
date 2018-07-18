@@ -1,0 +1,84 @@
+<template>
+    <div id="scenic">
+        <header>顺义文创地图</header>
+        <div class="sceniccont" v-for="n in POIinfo" :key="n.id" @click="sceClick(n.id)">
+            <img :src="n.top_img" alt="">
+            <h2>{{n.name}}</h2>
+            <h3>公园 · 绿地</h3>
+            <div class="impression">
+                <p><span>活动亮点：</span>{{n.description150}}</p>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+export default {
+    data (){
+        return{
+            POIinfo:[]
+        }
+    },
+    methods:{
+        getData(){
+            this.$http.get('http://dev.shunyi.mydeertrip.com:83/plan/sslist',{
+                params:{cursor:1,limit:100,regionIds:546
+                }}).then(res=>{
+                console.log(res.data.data.regionDetail[0].ssList)
+                this.POIinfo = res.data.data.regionDetail[0].ssList 
+            })
+        },
+        sceClick(id){
+            console.log('go')
+            this.$router.push({path:'/poiinfo/'+id})
+        }
+    },
+    mounted (){
+        this.getData()
+    }
+}
+</script>
+<style lang="scss" scoped>
+.sceniccont{
+    margin: 0.23rem auto;
+    width: 3.27rem
+}
+.sceniccont img{
+    height: 1.64rem;
+    width: 3.27rem;
+    background: #ccc;
+}
+.sceniccont h2{
+    margin: 0.16rem 0 0.06rem;
+    font-size: 0.17rem;
+    line-height: 0.17rem;
+    height: 0.17rem;
+    font-weight: 900;
+    color: #484848;
+}
+.sceniccont h3{
+    font-size: 0.12rem;
+    color: #3F3F3F;
+    height: 0.17rem;
+    line-height: 0.17rem;
+}
+.sceniccont .impression{
+    font-size: 0.12rem;
+    line-height: 0.18rem;
+    color: #3F3F3F; 
+    max-height: 0.54rem;
+    overflow: hidden;
+    margin: 0.06rem 0 0.3rem;
+}
+.impression span{
+    color: #119DFF
+}
+header{
+    height: 0.44rem;
+    font-size: 0.17rem;
+    text-align: center;
+    line-height: 0.44rem;
+    font-weight: 900;
+    color: #484848;
+    border-bottom: 0.01rem solid #EEEEEE;
+}
+</style>
