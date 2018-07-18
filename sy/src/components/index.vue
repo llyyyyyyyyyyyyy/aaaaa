@@ -1,5 +1,7 @@
 <template>
   <div id="maplist">
+      <header></header>
+    <img class="logo" src="../assets/img/logo@3x.png" alt="">
     <div id="container" class="mymap"></div>
     <footer>
         <div class="button" @click="toList">
@@ -50,7 +52,7 @@ export default {
             spaceBetween : 12,
             observer:true,
             slidesPerView: 1,
-            // observeParents:true,
+            observeParents:true,
             onSlideChangeEnd() {
                 that.BMap.setCenter(that.center[that.mySwiper.activeIndex])
                 that.infoWindow.open(that.BMap,that.center[that.mySwiper.activeIndex])
@@ -67,12 +69,13 @@ export default {
                 this.initSwiper()
                 this.loadmap(res.data.data.regionDetail[0].ssList)
                 this.swiperData =  res.data.data.regionDetail[0].ssList
-                //点击地图 swiper消失
+                //绑定点击地图 swiper消失
                 this.BMap.on('click',()=>{if(this.infoWindow.getIsOpen()){
                     this.swShow = !this.swShow
                 }})
                 this.area = this.BMap.getBounds()
-                
+                // this.BMap.setZoom(10)
+                // console.log( this.BMap.getZoom())
                 this.BMap.setLimitBounds(this.area)
             })
         },
@@ -151,6 +154,7 @@ export default {
         });
         console.log(mapData)
         // that.center = []
+        // 116.515998,40.140454     116.960601,40.132843
         for (let i = 0 ; i < mapData.length; i++) {
             that.center.push([mapData[i].longitude,mapData[i].latitude])
             let marker = new AMap.Marker({
@@ -214,6 +218,17 @@ export default {
 
 
 <style lang="scss" scoped>
+header{
+    height: 0.44rem;
+}
+.logo{
+    position: fixed;
+    top: 0.12rem;
+    left: 0.12rem;
+    height: 1.15rem;
+    width: 1.15rem;
+    z-index: 200;
+}
  .swiperBox{
         width: 3.75rem;
         z-index: 300;
@@ -269,13 +284,6 @@ footer{
         left:0.14rem;
     }
 }
-//  .fade-enter-active, .fade-leave-active {
-//           transition: opacity 5s
-//         }
-//         .fade-enter, .fade-leave-active {
-//           opacity: 0
-//         }
-
 
 </style>
 <style lang="scss">
@@ -293,8 +301,9 @@ footer{
     border-radius: 0.165rem;
     height: 0.34rem;
     max-width: 1.19rem;
-        display: flex;
-        overflow: hidden;
+    display: flex;
+    overflow: hidden;
+    align-items:center;
         img{
             height: 0.34rem;
             width: 0.33rem;
@@ -304,13 +313,7 @@ footer{
             display:flex;
             font-size:0.1rem;
             color:#fff;
-            height: 0.28rem;
         } 
 }
-.amap-info-close{
-    display: none;
-}
-.amap-info-sharp{
-    display: none;
-}
+
 </style>

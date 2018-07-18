@@ -37,6 +37,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+#scenic{
+    padding-bottom: 0.3rem
+}
 .sceniccont{
     margin: 0.23rem auto;
     width: 3.27rem

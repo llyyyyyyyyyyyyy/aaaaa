@@ -1,16 +1,8 @@
 <template>
     <div class="poiinfo">
         <div id="info">
-            <div class="swiperBox">
-                <div class="swiper-container">                
-                    <div class="swiper-wrapper" >
-                        <div class="swiper-slide" v-for="(n,i) in this.InfoData.top_img" :key="n.id">
-                            <img class="city" :src="n" alt="" >
-                            {{i}}
-                        </div>
-                    </div
-                    >
-                </div>
+            <div class="img-box">
+                <img :src="InfoData.top_img" alt="">
             </div>
             <h2>{{InfoData.name}}</h2>
             <h3>公园 · 绿地</h3>
@@ -48,7 +40,7 @@
                 <h4>
                     <img src="../assets/img/icon copy@3x.png" alt="">
                     <span>时间</span>
-                    <i>{{InfoData.guideBestTime}}</i>
+                    <i>{{InfoData.guideOpenTime}}</i>
                 </h4>
                 <h4>
                     <img src="../assets/img/交通 copy@3x.png" alt="">
@@ -63,12 +55,12 @@
                 <h4 class="B">
                     <img src="../assets/img/网址@3x.png" alt="">
                     <span>网站</span>
-                    <i>http://www.sclgh.cn</i>
+                    <i>{{InfoData.guideWebsite}}</i>
                 </h4>
                 <h4 class="B">
                     <img src="../assets/img/电话@3x.png" alt="">
                     <span>电话</span>
-                    <i>0834-6390322；0834-6390302</i>
+                    <i>{{InfoData.guidePhone}}</i>
                 </h4>
             </div>
             <div class="title">
@@ -175,29 +167,14 @@ export default {
     margin: 0.34rem auto 0.3rem;
     overflow: hidden;
 }
-.swiperBox{
+.img-box{
         height: 3.27rem;
         width: 3.27rem;
         overflow: hidden;
-        .swiper-wrapper{
-            width: 3.27rem;
-        }
-        .swiper-slide{
-            color: #fff;
-            height: 3.27rem;
-            background: #ccc;
-            position: relative;
-            border-radius: 0.04rem;
             img{
                 width: 3.27rem;
                 height: 3.27rem;
-            }
-            h4{
-                position: absolute;
-                bottom: 0.15rem;
-                left:0.2rem
-            }
-        }    
+            }   
     }
 #info h2{
     color: #484848;
