@@ -1,6 +1,5 @@
 <template>
     <div id="scenic">
-        <header>顺义文创地图</header>
         <div class="sceniccont" v-for="n in POIinfo" :key="n.id" @click="sceClick(n.id)">
             <img :src="n.top_img" alt="">
             <h2>{{n.name}}</h2>
@@ -71,14 +70,5 @@ export default {
 }
 .impression span{
     color: #119DFF
-}
-header{
-    height: 0.44rem;
-    font-size: 0.17rem;
-    text-align: center;
-    line-height: 0.44rem;
-    font-weight: 900;
-    color: #484848;
-    border-bottom: 0.01rem solid #EEEEEE;
 }
 </style>

@@ -1,14 +1,15 @@
 <template>
     <div class="poiinfo">
-        <header>顺义文创中心</header>
         <div id="info">
             <div class="swiperBox">
                 <div class="swiper-container">                
                     <div class="swiper-wrapper" >
-                        <div class="swiper-slide" v-for="n in this.InfoData" :key="n.id">
-                            <img class="city" :src="n.cover_img" alt="" >
+                        <div class="swiper-slide" v-for="(n,i) in this.InfoData.top_img" :key="n.id">
+                            <img class="city" :src="n" alt="" >
+                            {{i}}
                         </div>
-                    </div>
+                    </div
+                    >
                 </div>
             </div>
             <h2>{{InfoData.name}}</h2>
@@ -116,7 +117,7 @@ export default {
             let that = this
             this.mySwiper = new Swiper('.swiper-container', {
             resistanceRatio:0.5,
-            spaceBetween : 12,
+            spaceBetween : 0,
             observer:true,
             slidesPerView: 1,
             })},
@@ -186,6 +187,7 @@ export default {
             height: 3.27rem;
             background: #ccc;
             position: relative;
+            border-radius: 0.04rem;
             img{
                 width: 3.27rem;
                 height: 3.27rem;
@@ -197,16 +199,6 @@ export default {
             }
         }    
     }
-// #info .swiperBox{
-//     height: 3.27rem;
-//     width: 3.27rem;
-//     overflow: hidden;
-// }
-// #info .swiperBox img{
-//     width: auto;
-//     height: 100%;
-//     background: red
-// }
 #info h2{
     color: #484848;
     font-size:0.24rem;
@@ -347,14 +339,5 @@ main .intrp .unfold{
 .map{
     height: 1.09rem;
     width: 3.27rem
-}
-header{
-    height: 0.44rem;
-    font-size: 0.17rem;
-    text-align: center;
-    line-height: 0.44rem;
-    font-weight: 900;
-    color: #484848;
-    border-bottom: 0.01rem solid #EEEEEE;
 }
 </style>

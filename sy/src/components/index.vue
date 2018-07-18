@@ -1,6 +1,5 @@
 <template>
   <div id="maplist">
-    <header>顺义文创地图</header>
     <div id="container" class="mymap"></div>
     <footer>
         <div class="button" @click="toList">
@@ -8,16 +7,17 @@
         </div>
       
             <div class="swiperBox">
-                  <!-- <transition leave-active-class="fadeIn" enter-active-class="fadeInDown"> -->
-                <div class="swiper-container" v-show="swShow">                
+                <transition leave-active-class="animated  fadeOutDown" enter-active-class="animated fadeInUp">
+                <div class="swiper-container" v-show="swShow" >                
                     <div class="swiper-wrapper" >
                         <div class="swiper-slide" v-for="n in this.swiperData" :key="n.id">
                             <img class="city" :src="n.cover_img" alt="" >
+                            <img class="shadow" src="../assets/img/Rectangle@3x.png" alt="" >
                             <h4>{{n.name}}</h4>
                         </div>
                     </div>
                 </div>
-                <!-- </transition> -->
+                </transition>
             </div>
          
     </footer>
@@ -114,8 +114,8 @@ export default {
                     strokeColor: "#ccc", //线颜色
                     strokeOpacity: 1, //线透明度
                     strokeWeight: 1, //线宽
-                    fillColor: "#999", //填充色
-                    fillOpacity: 0.55, //填充透明度
+                    fillColor: "#ddd", //填充色
+                    fillOpacity: 0.5, //填充透明度
                 };
             });
         }
@@ -160,9 +160,9 @@ export default {
                 icon:require('../assets/img/Oval 3@3x.png'),
             });
             marker.content = `<div class="mMarker">
-                                <img src=${require('../assets/img/人文@3x.png')}>
-                                <i>${mapData[i].name}</i>
-                            </div>`;
+                                    <img src=${require('../assets/img/人文@3x.png')}>
+                                    <i>${mapData[i].name}</i>
+                                </div>`;
             marker.on('click', function (e) {
                 that.mySwiper.slideTo(i)
                 that.swShow = true
@@ -199,8 +199,8 @@ export default {
                         strokeColor: '#ccc', //线颜色
                         strokeOpacity: 1, //线透明度
                         strokeWeight: 1, //线宽
-                        fillColor: '#999', //填充色
-                        fillOpacity: 0.85, //填充透明度
+                        fillColor: '#ddd', //填充色
+                        fillOpacity: 0.5, //填充透明度
                         map: that.BMap,
                         path: path
                     });
@@ -226,7 +226,7 @@ export default {
             height: 1.5rem;
             background: #ccc;
             position: relative;
-            img{
+            .city{
                 width: 3.27rem;
                 height: 1.5rem;
             }
@@ -244,15 +244,6 @@ export default {
     bottom: 0;
     z-index: 10;
     position: relative;
-}
-header{
-    height: 0.44rem;
-    font-size: 0.17rem;
-    text-align: center;
-    line-height: 0.44rem;
-    font-weight: 900;
-    color: #484848;
-    border-bottom: 0.01rem solid #EEEEEE;
 }
 footer{
     position: fixed;
