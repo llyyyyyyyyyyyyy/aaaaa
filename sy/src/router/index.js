@@ -24,6 +24,12 @@ export default new Router({
       name: 'POIinfo',
       component: POIinfo,
       props:true
+    },
+    {
+      path:'/maplist/:id',
+      name:'maplist',
+      component:maplist,
+      props:true
     }
   ]
 })

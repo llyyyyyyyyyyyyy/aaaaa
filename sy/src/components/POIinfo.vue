@@ -25,6 +25,7 @@
             </div>
             <div class="map">
                 <div id="container"></div>
+                <div class="shadow" @click="mapClick()"></div>
             </div>
             <div class="practical">
                 <h4>
@@ -104,7 +105,14 @@ export default {
         }
     },
     props:['id'],
-     methods: {
+    created(){
+        document.body.scrollTop = '0';
+    },
+    methods: {
+         mapClick(){
+             console.log(this.id)
+             this.$router.push({path:'/maplist/'+this.id})
+         },
          initSwiper(){
             let that = this
             this.mySwiper = new Swiper('.swiper-container', {
@@ -138,7 +146,7 @@ export default {
                 params:{token:'e288cdc4355f3704f8efaef76347b3df',id:this.id
                 }}).then(res=>{
                 this.loadmap(res.data.data.ss)
-                console.log(this.id)
+                // console.log(this.id)
                 this.InfoData = res.data.data.ss
                 this.initSwiper()
             })
@@ -156,7 +164,7 @@ export default {
     },
     mounted(){
     this.getInfo()
-
+    console.log(document.body.scrollTop);
     },
     
 }
@@ -315,6 +323,14 @@ main .intrp .unfold{
 }
 .map{
     height: 1.09rem;
-    width: 3.27rem
+    width: 3.27rem;
+    position: relative;
+    .shadow{
+        height: 1.09rem;
+        width: 3.27rem;
+        position: absolute;
+        top:0;
+        z-index: 300;
+    }
 }
 </style>

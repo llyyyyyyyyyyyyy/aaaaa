@@ -1,6 +1,6 @@
 <template>
   <div id="maplist">
-      <header></header>
+      <header @click="hclick()"></header>
     <img class="logo" src="../assets/img/logo@3x.png" alt="">
     <div id="container" class="mymap"></div>
     <footer>
@@ -12,7 +12,7 @@
                 <transition leave-active-class="animated  fadeOutDown" enter-active-class="animated fadeInUp">
                 <div class="swiper-container" v-show="swShow" >                
                     <div class="swiper-wrapper" >
-                        <div class="swiper-slide" v-for="n in this.swiperData" :key="n.id">
+                        <div class="swiper-slide" v-for="n in this.swiperData" :key="n.id" @click="toInfo(n.id)">
                             <img class="city" :src="n.cover_img" alt="" >
                             <img class="shadow" src="../assets/img/Rectangle@3x.png" alt="" >
                             <h4>{{n.name}}</h4>
@@ -29,10 +29,10 @@
 <script>
 import Swiper from 'swiper'
 import AMap from 'AMap'
+import { Indicator } from 'mint-ui';
 export default {
     data (){
         return{
-            // mapData:[116.708463,40.132709], 
             swiperData:[],
             BMap:[],
             center:[],
@@ -40,11 +40,21 @@ export default {
             swShow:false,
             area:[]
     }},
-    mounted(){
-    this.getData()
-    // this.loadmap()
+    beforeMount(){
+        this.getData()
+        // this.loadmap()
+        let that = this
+        setTimeout(()=>{that.BMap.setZoom(10)},1000)
+    },
+    created(){
+        Indicator.open()
     },
     methods: {
+        toInfo(id){
+            console.log(id)
+            this.$router.push({path:'/poiinfo/'+id})
+            
+        },
         initSwiper(){
             let that = this
             this.mySwiper = new Swiper('.swiper-container', {
@@ -74,12 +84,11 @@ export default {
                     this.swShow = !this.swShow
                 }})
                 this.area = this.BMap.getBounds()
-                // this.BMap.setZoom(10)
-                // console.log( this.BMap.getZoom())
                 this.BMap.setLimitBounds(this.area)
+                Indicator.close()
             })
         },
-        //页面跳转
+        //跳转列表页
         toList(){
             this.$router.push({path:'/poilist'})
         },
@@ -153,15 +162,15 @@ export default {
             isCustom:true
         });
         console.log(mapData)
-        // that.center = []
-        // 116.515998,40.140454     116.960601,40.132843
         for (let i = 0 ; i < mapData.length; i++) {
             that.center.push([mapData[i].longitude,mapData[i].latitude])
             let marker = new AMap.Marker({
-                // position: lnglats[i],
                 position: [mapData[i].longitude,mapData[i].latitude],
                 map: that.BMap,
-                icon:require('../assets/img/Oval 3@3x.png'),
+                icon:new AMap.Icon({            
+                    image: require('../assets/img/Oval 3@3x.png'),
+                    imageSize: new AMap.Size(10,10),
+                }) 
             });
             marker.content = `<div class="mMarker">
                                     <img src=${require('../assets/img/人文@3x.png')}>
@@ -173,10 +182,9 @@ export default {
                 that.infoWindow.setContent(e.target.content);
                 that.infoWindow.open(that.BMap, e.target.getPosition());
                 that.BMap.setCenter([mapData[i].longitude,mapData[i].latitude])
+                that.BMap.setZoom(13)
             });
-            // marker.emit('click', {target: marker});
         }
-
     
         that.BMap.setFitView();
         function initPage(DistrictExplorer) {
@@ -239,7 +247,6 @@ header{
         .swiper-slide{
             color: #fff;
             height: 1.5rem;
-            background: #ccc;
             position: relative;
             .city{
                 width: 3.27rem;
@@ -263,6 +270,7 @@ header{
 footer{
     position: fixed;
     bottom: 0.25rem;
+    z-index: 200;
 }
 #maplist .button{
     background:#fff;
@@ -287,18 +295,18 @@ footer{
 
 </style>
 <style lang="scss">
-.amap-icon{
-    img{
-        height: 0.09rem;
-        width:0.09rem;
-        position: relative;
-    }
-}
+// .amap-icon{
+//     img{
+//         height: 0.1rem;
+//         width:0.1rem;
+//         position: relative;
+//     }
+// }
 .mMarker{
     background:#EAC454;
     padding:0 0.12rem 0 0;
     border:1px solid #fff;
-    border-radius: 0.165rem;
+    border-radius: 0.17rem;
     height: 0.34rem;
     max-width: 1.19rem;
     display: flex;
