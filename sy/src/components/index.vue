@@ -46,9 +46,6 @@ export default {
         let that = this
         setTimeout(()=>{that.BMap.setZoom(10)},1000)
     },
-    created(){
-        Indicator.open()
-    },
     methods: {
         toInfo(id){
             console.log(id)
@@ -85,7 +82,6 @@ export default {
                 }})
                 this.area = this.BMap.getBounds()
                 this.BMap.setLimitBounds(this.area)
-                Indicator.close()
             })
         },
         //跳转列表页
@@ -295,13 +291,6 @@ footer{
 
 </style>
 <style lang="scss">
-// .amap-icon{
-//     img{
-//         height: 0.1rem;
-//         width:0.1rem;
-//         position: relative;
-//     }
-// }
 .mMarker{
     background:#EAC454;
     padding:0 0.12rem 0 0;

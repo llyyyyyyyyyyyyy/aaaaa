@@ -44,13 +44,10 @@ export default {
     props:['id'],
     beforeMount(){
         this.getData()
-        // this.loadmap()
-        let that = this
-        // setTimeout(()=>{that.BMap.setZoom(13)},1000)
     },
     watch:{
         BMap:function(){
-            console.log('aaa')
+            // console.log('aaa')
         }
     },
     methods: {
@@ -76,6 +73,10 @@ export default {
                 }
             })
             this.mySwiper.slideTo(i)
+            if(i == 0){
+                        setTimeout(()=>{that.BMap.setZoomAndCenter(13,[that.swiperData[0].longitude,that.swiperData[0].latitude])},500)
+                    }
+                    
         },
         //获取数据
         getData(){
@@ -193,8 +194,7 @@ export default {
                 if(mapData[i].id == that.id){
                     that.infoWindow.open(that.BMap,that.center[i])
                     that.infoWindow.setContent(that.BMap.getAllOverlays('marker')[i].content)
-                    that.initSwiper(i)
-                    console.log(that.center[i])
+                    that.initSwiper(i,)   
                 }
             }
             

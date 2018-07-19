@@ -28,11 +28,12 @@ export default new Router({
       props:true
     },
     {
-<<<<<<< HEAD
       path:'/maplist/:id',
       name:'maplist',
       component:maplist,
-=======
+      props:true
+    },
+    {
       path: '/comment/:name/:id',
       name: 'comment',
       component: comment,
@@ -42,7 +43,6 @@ export default new Router({
       path: '/author',
       name: 'author',
       component: author,
->>>>>>> jyx
       props:true
     }
   ]
