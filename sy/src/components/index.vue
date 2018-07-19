@@ -46,6 +46,12 @@ export default {
         let that = this
         setTimeout(()=>{that.BMap.setZoom(10)},1000)
     },
+    beforeUpdate () {
+      console.log(this.infoWindow.getIsOpen())  
+    //   if(this.infoWindow.getIsOpen()){
+    //         this.infoWindow.open(this.BMap, e.target.getPosition());
+    //     }
+    },
     methods: {
         toInfo(id){
             console.log(id)
@@ -63,7 +69,7 @@ export default {
             onSlideChangeEnd() {
                 that.BMap.setCenter(that.center[that.mySwiper.activeIndex])
                 that.infoWindow.open(that.BMap,that.center[that.mySwiper.activeIndex])
-                that.infoWindow.setContent(that.BMap.getAllOverlays('marker')[that.mySwiper.activeIndex].content)
+                
                 }
             })
         },
@@ -176,7 +182,7 @@ export default {
                 that.mySwiper.slideTo(i)
                 that.swShow = true
                 that.infoWindow.setContent(e.target.content);
-                that.infoWindow.open(that.BMap, e.target.getPosition());
+                that.infoWindow.open(that.BMap, e.target.getPosition());   
                 that.BMap.setCenter([mapData[i].longitude,mapData[i].latitude])
                 that.BMap.setZoom(13)
             });
