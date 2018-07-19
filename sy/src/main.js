@@ -17,6 +17,43 @@ Vue.prototype.$http = axios
 
 Vue.config.productionTip = false
 
+window.host = 'http://shunyi.sinacolour.com/wxcallback';
+window.debug = true;
+window.tool = {}
+window.tool.token = function() {
+	let token = localStorage.getItem('token')
+	if (!token || token === 'undefined') {
+		// if (debug) {
+		// 	return 'test'
+		// }
+		// router.replace({ path: '/author' });
+		return false;
+	};
+	return token;
+}
+
+router.beforeEach((to, from, next) => {
+	// tool.title((to.meta && to.meta.title) || '发现·海南')
+	if (!window.debug) {
+		if (tool.token()) {
+			if (to.path == '/author') {
+				// 用户使用后退返回到授权页，则默认回到首页
+				next('/');
+				return false;
+			}
+		} else {
+			if (to.path !== '/author') {
+				// tool.cookie.set('beforeLoginUrl', to.fullPath);
+				next('/author');
+				return false;
+			}
+		}
+		next();
+	} else {
+		next();
+	}
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
