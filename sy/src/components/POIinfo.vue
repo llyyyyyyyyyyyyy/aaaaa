@@ -73,6 +73,7 @@
             <div class="title">
                 <div class="k"></div>
                 <h3>景点评论</h3>
+                <router-link :to="{ name: 'comment', params:{ name: `${InfoData.name}`, id:InfoData.id } }">写评论</router-link>
             </div>
             <div class="comment">
                 <h5>
@@ -226,12 +227,18 @@ main{
 main .title{
     line-height: 0.24rem;
     margin-bottom: 0.12rem;
+    position: relative;
 }
 main .title .k{
     width: 0.03rem;
     height: 0.12rem;
     background: #119DFF;
     display: inline-block;
+}
+main .title a{
+    color: #119DFF;
+    position: absolute;
+    right: 0;
 }
 main .title h3{
     display: inline-block;

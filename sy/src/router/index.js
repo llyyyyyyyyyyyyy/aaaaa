@@ -4,6 +4,8 @@ import Index from '@/components/index'
 import POIlist from '../components/POIlist.vue'
 import POIinfo from '../components/POIinfo.vue'
 import maplist from '../components/maplist.vue'
+import author from "../author.vue"
+import comment from '../components/comments/comments.vue'
 
 Vue.use(Router)
 
@@ -23,6 +25,18 @@ export default new Router({
       path: '/poiinfo/:id',
       name: 'POIinfo',
       component: POIinfo,
+      props:true
+    },
+    {
+      path: '/comment/:name/:id',
+      name: 'comment',
+      component: comment,
+      props:true
+    },
+    {
+      path: '/author',
+      name: 'author',
+      component: author,
       props:true
     }
   ]
