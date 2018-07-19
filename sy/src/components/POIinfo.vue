@@ -69,18 +69,20 @@
                 <h3>景点评论</h3>
                 <router-link :to="{ name: 'comment', params:{ name: `${InfoData.name}`, id:InfoData.id } }">写评论</router-link>
             </div>
-            <div class="comment">
-                <h5>
-                    <img src="" alt="">
-                    <span>aimee叮叮叮</span>
-                    <i>2017-04-10</i>
-                </h5>
-                <p class=".cont">
-                    很美很美！即使已经离开数天，泸沽湖的美还深深印刻在我的脑海里！洱海的美不及泸沽湖之万一。希望在以后有机会能够呆上一周甚至更长时间
-                </p>
-                <img class="pic" alt="" src="">
+            <div class="commentBox">
+                <div class="comment">
+                    <h5>
+                        <img src="" alt="">
+                        <span>aimee叮叮叮</span>
+                        <i>2017-04-10</i>
+                    </h5>
+                    <p class=".cont">
+                        很美很美！即使已经离开数天，泸沽湖的美还深深印刻在我的脑海里！洱海的美不及泸沽湖之万一。希望在以后有机会能够呆上一周甚至更长时间
+                    </p>
+                    <img class="pic" alt="" src="">
+                </div>
+                <p class="more">查看全部精彩评论   ></p>
             </div>
-            <p class="more">查看全部精彩评论   ></p>
             <div class="title">
                 <div class="k"></div>
                 <h3>附近景点</h3>
