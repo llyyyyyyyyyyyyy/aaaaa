@@ -1,19 +1,8 @@
 <template>
     <div class="poiinfo">
         <div id="info">
-<<<<<<< HEAD
-            <div class="swiperBox">
-                <div class="swiper-container">                
-                    <div class="swiper-wrapper" >
-                        <div class="swiper-slide" :key="InfoData.id">
-                            <img class="city" :src="InfoData.cover_img" alt="" >
-                        </div>
-                    </div>
-                </div>
-=======
             <div class="img-box">
                 <img :src="InfoData.top_img" alt="">
->>>>>>> master
             </div>
             <h2>{{InfoData.name}}</h2>
             <h3>公园 · 绿地</h3>
@@ -23,7 +12,7 @@
                 <div class="k"></div>
                 <h3>活动介绍</h3>
             </div>
-            <div class="pSty">
+            <div class="pSty"  >
                 <p><span>印象：</span>{{InfoData.description150}}</p>
             </div>
             <div class="intrp pSty" ref="intrp">
@@ -39,37 +28,37 @@
                 <div class="shadow" @click="mapClick()"></div>
             </div>
             <div class="practical">
-                <h4>
+                <h4 v-if="InfoData.guideAddress">
                     <img src="../assets/img/地址 (1)@3x.png" alt="">
                     <span>地址</span>
                     <i>{{InfoData.guideAddress}}</i>
                 </h4>
-                <h4>
+                <h4 v-if="InfoData.guideTicket">
                     <img src="../assets/img/icon copy1@3x.png" alt="" >
                     <span>门票</span>
                     <i>{{InfoData.guideTicket}}</i>
                 </h4>
-                <h4>
+                <h4 v-if="InfoData.guideOpenTime">
                     <img src="../assets/img/icon copy@3x.png" alt="">
                     <span>时间</span>
                     <i>{{InfoData.guideOpenTime}}</i>
                 </h4>
-                <h4>
+                <h4 v-if="InfoData.guideTraffic">
                     <img src="../assets/img/交通 copy@3x.png" alt="">
                     <span>交通</span>
                     <i>{{InfoData.guideTraffic}}</i>
                 </h4>
-                <h4>
+                <h4 v-if="InfoData.guideTips">
                     <img src="../assets/img/灯泡@3x.png" alt="">
                     <span>贴士</span>
                     <i>{{InfoData.guideTips}}</i>
                 </h4>
-                <h4 class="B">
+                <h4 class="B" v-if="InfoData.guideWebsite">
                     <img src="../assets/img/网址@3x.png" alt="">
                     <span>网站</span>
                     <i>{{InfoData.guideWebsite}}</i>
                 </h4>
-                <h4 class="B">
+                <h4 class="B" v-if="InfoData.guidePhone">
                     <img src="../assets/img/电话@3x.png" alt="">
                     <span>电话</span>
                     <i>{{InfoData.guidePhone}}</i>
@@ -78,9 +67,11 @@
             <div class="title">
                 <div class="k"></div>
                 <h3>景点评论</h3>
-                <router-link :to="{ name: 'comment', params:{ name: `${InfoData.name}`, id:InfoData.id } }">写评论</router-link>
+                <router-link :to="{ name: 'comment', params:{ name: `${InfoData.name}`, id:InfoData.id } }">
+                    写评论
+                    <img src="../assets/img/笔 copy 6@3x.png" alt="">
+                </router-link>
             </div>
-<<<<<<< HEAD
             <div class="comment" v-for="(item,index) in comment" :key="item.id" v-if="index < commentNum">
                 <h5>
                     <img :src="item.photo" alt="">
@@ -95,22 +86,6 @@
                 </div>
             </div>
             <p class="more" @click="commentNum += 10" v-if="commentNum < comment.length">查看全部精彩评论   ></p>
-=======
-            <div class="commentBox">
-                <div class="comment">
-                    <h5>
-                        <img src="" alt="">
-                        <span>aimee叮叮叮</span>
-                        <i>2017-04-10</i>
-                    </h5>
-                    <p class=".cont">
-                        很美很美！即使已经离开数天，泸沽湖的美还深深印刻在我的脑海里！洱海的美不及泸沽湖之万一。希望在以后有机会能够呆上一周甚至更长时间
-                    </p>
-                    <img class="pic" alt="" src="">
-                </div>
-                <p class="more">查看全部精彩评论   ></p>
-            </div>
->>>>>>> master
             <div class="title">
                 <div class="k"></div>
                 <h3>附近景点</h3>
@@ -179,7 +154,6 @@ export default {
             this.$http.get('http://dev.shunyi.mydeertrip.com:83/scenic_spots/guide',{
                 params:{token:tool.token(),id:this.id
                 }}).then(res=>{
-<<<<<<< HEAD
                     console.log(res.data.data.ss)
                     this.loadmap(res.data.data.ss)
                     console.log(this.id)
@@ -192,12 +166,6 @@ export default {
             this.$http.get('http://dev.shunyi.mydeertrip.com:84/comment/list?itemId='+this.$route.params.id+'&isCream=2&qType=all&start=0&limit=1000&token='+tool.token(),).then(res=>{
                     console.log(res.data.data)
                     this.comment = res.data.data.list;
-=======
-                this.loadmap(res.data.data.ss)
-                // console.log(this.id)
-                this.InfoData = res.data.data.ss
-                this.initSwiper()
->>>>>>> master
             })
         },
          //展开内容
@@ -254,6 +222,12 @@ main .title{
     line-height: 0.24rem;
     margin-bottom: 0.12rem;
     position: relative;
+    img{
+        height: 0.12rem;
+        width: 0.12rem;
+        float: right;
+        padding:0.06rem 0 0 0.06rem;
+    }
 }
 main .title .k{
     width: 0.03rem;
