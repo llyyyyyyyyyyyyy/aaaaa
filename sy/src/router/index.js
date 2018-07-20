@@ -6,6 +6,7 @@ import POIinfo from '../components/POIinfo.vue'
 import maplist from '../components/maplist.vue'
 import author from "../author.vue"
 import comment from '../components/comments/comments.vue'
+import photoPage from '../components/photoPage/photoPage.vue'
 
 Vue.use(Router)
 
@@ -43,6 +44,12 @@ export default new Router({
       path: '/author',
       name: 'author',
       component: author,
+      props:true
+    },
+    {
+      path: '/photoPage',
+      name: 'photoPage',
+      component: photoPage,
       props:true
     }
   ]

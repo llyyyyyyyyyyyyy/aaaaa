@@ -4,23 +4,29 @@
     <img class="logo" src="../assets/img/logo@3x.png" alt="">
     <div id="container" class="mymap"></div>
     <footer>
-        <div class="button" @click="toList">
+        <transition leave-active-class="animated  fadeOutDown" enter-active-class="animated fadeInUp">
+        <div class="button" @click="toList" v-show="swShow" >
             <img src="../assets/img/Shape@3x.png" alt=""> 切换列表
         </div>
-      
-            <div class="swiperBox">
-                <transition leave-active-class="animated  fadeOutDown" enter-active-class="animated fadeInUp">
-                <div class="swiper-container" v-show="swShow" >                
-                    <div class="swiper-wrapper" >
-                        <div class="swiper-slide" v-for="n in this.swiperData" :key="n.id" @click="toInfo(n.id)">
-                            <img class="city" :src="n.cover_img" alt="" >
-                            <img class="shadow" src="../assets/img/Rectangle@3x.png" alt="" >
-                            <h4>{{n.name}}</h4>
-                        </div>
+        </transition>
+        <transition leave-active-class="animated  fadeOutDown" enter-active-class="animated fadeInUp">
+        <div class="button2" @click="toList" v-show="!swShow" >
+            <img src="../assets/img/Shape@3x.png" alt=""> 切换列表
+        </div>
+        </transition>
+        <div class="swiperBox">
+            <transition leave-active-class="animated  fadeOutDown" enter-active-class="animated fadeInUp">
+            <div class="swiper-container" v-show="swShow" >                
+                <div class="swiper-wrapper" >
+                    <div class="swiper-slide" v-for="n in this.swiperData" :key="n.id" @click="toInfo(n.id)">
+                        <img class="city" :src="n.cover_img+'-Newdeer21'" alt="" >
+                        <img class="shadow" src="../assets/img/Rectangle@3x.png" alt="" >
+                        <h4>{{n.name}}</h4>
                     </div>
                 </div>
-                </transition>
             </div>
+            </transition>
+        </div>
          
     </footer>
   </div>
@@ -29,7 +35,6 @@
 <script>
 import Swiper from 'swiper'
 import AMap from 'AMap'
-import { Indicator } from 'mint-ui';
 export default {
     data (){
         return{
@@ -48,7 +53,6 @@ export default {
     },
     methods: {
         toInfo(id){
-            console.log(id)
             this.$router.push({path:'/poiinfo/'+id})
             
         },
@@ -65,13 +69,7 @@ export default {
                 that.BMap.setCenter(that.center[that.mySwiper.activeIndex])
                 that.infoWindow.open(that.BMap,that.center[that.mySwiper.activeIndex])
                 that.infoWindow.setContent(that.BMap.getAllOverlays('marker')[that.mySwiper.activeIndex].content)
-                },
-            // onTransitionEnd() {
-            //     that.BMap.setZoom(13)
-            //     that.BMap.setCenter(that.center[that.mySwiper.activeIndex])
-            //     that.infoWindow.open(that.BMap,that.center[that.mySwiper.activeIndex])
-            //     that.infoWindow.setContent(that.BMap.getAllOverlays('marker')[that.mySwiper.activeIndex].content)
-            //     }
+                }
             })
             
         },
@@ -80,7 +78,6 @@ export default {
             this.$http.get('http://dev.shunyi.mydeertrip.com:83/plan/sslist',{
                 params:{cursor:1,limit:100,regionIds:546
                 }}).then(res=>{
-                // console.log(res.data.data.regionDetail[0].ssList)
                 this.initSwiper()
                 this.loadmap(res.data.data.regionDetail[0].ssList)
                 this.swiperData =  res.data.data.regionDetail[0].ssList
@@ -165,32 +162,29 @@ export default {
             closeWhenClickMap:true,
             isCustom:true
         });
-        console.log(mapData)
         for (let i = 0 ; i < mapData.length; i++) {
             that.center.push([mapData[i].longitude,mapData[i].latitude])
             let marker = new AMap.Marker({
                 position: [mapData[i].longitude,mapData[i].latitude],
                 map: that.BMap,
+                offset: new AMap.Pixel(-5,-5),
                 icon:new AMap.Icon({            
-                    image: require('../assets/img/Oval 3@3x.png'),
+                    image:mapData[i].icon=='human'? require('../assets/img/Oval 7@3x.png') : require('../assets/img/Oval 3@3x.png'),
                     imageSize: new AMap.Size(10,10),
                 }) 
             });
-            marker.content = `<div class="mMarker">
-                                    <img src=${require('../assets/img/人文@3x.png')}>
+            marker.content = `<div class="mMarker" style="background:${mapData[i].icon=='human'?'#EAC454':'#56B7F0' }">
+                                    <img src=${mapData[i].icon=='human'?require('../assets/img/人文@3x.png'):require('../assets/img/自然@3x.png')}>
                                     <i>${mapData[i].name}</i>
                                 </div>`;
             marker.on('click', function (e) {
                 that.mySwiper.slideTo(i)
                 that.swShow = true
                 that.infoWindow.setContent(e.target.content);
-                // that.infoWindow.open(that.BMap, e.target.getPosition());   
                 that.BMap.setCenter([mapData[i].longitude,mapData[i].latitude])
                 that.BMap.setZoom(13)
-                // console.log(that.infoWindow.getIsOpen())
                 if(!that.infoWindow.getIsOpen()){
                     that.infoWindow.open(that.BMap, e.target.getPosition());
-                    // that.infoWindow.setContent(e.target.content);
                 }
             });
         }
@@ -277,8 +271,6 @@ header{
 #maplist{
     height: 6.67rem;
     width: 100%;
-    position: fixed;
-    bottom: 0;
     z-index: 10;
     position: relative;
 }
@@ -307,28 +299,51 @@ footer{
         left:0.14rem;
     }
 }
+#maplist .button2{
+    background:#fff;
+    position: fixed;
+    bottom:0.4rem;
+    width: 1.1rem;
+    height: 0.33rem;
+    text-align: center;
+    line-height: 0.33rem;
+    color: #5F5F5F;
+    border-radius: 0.165rem;
+    padding-left: 0.23rem;
+    box-sizing: border-box;
+    margin:0 0 0.15rem 1.33rem;
+    img{
+        height: 0.11rem;
+        width: 0.13rem;
+        position: absolute;
+        top:0.11rem;
+        left:0.14rem;
+    }
+}
 
 </style>
 <style lang="scss">
 .mMarker{
-    background:#EAC454;
+    // background:#EAC454;
     padding:0 0.12rem 0 0;
     border:1px solid #fff;
-    border-radius: 0.17rem;
-    height: 0.34rem;
+    border-radius: 0.18rem;
+    height: 0.32rem;
     max-width: 1.19rem;
     display: flex;
     overflow: hidden;
     align-items:center;
         img{
-            height: 0.34rem;
-            width: 0.33rem;
+            height: 0.35rem;
+            width: 0.35rem;
             display: inline;
+            float: left;
         }
         i{
             display:flex;
             font-size:0.1rem;
             color:#fff;
+            float: right;
         } 
 }
 

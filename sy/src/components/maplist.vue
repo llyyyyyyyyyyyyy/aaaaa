@@ -13,7 +13,7 @@
                 <div class="swiper-container" v-show="swShow" >                
                     <div class="swiper-wrapper" >
                         <div class="swiper-slide" v-for="n in this.swiperData" :key="n.id" @click="toInfo(n.id)">
-                            <img class="city" :src="n.cover_img" alt="" >
+                            <img class="city" :src="n.cover_img+'-Newdeer21'" alt="" >
                             <img class="shadow" src="../assets/img/Rectangle@3x.png" alt="" >
                             <h4>{{n.name}}</h4>
                         </div>
@@ -29,7 +29,6 @@
 <script>
 import Swiper from 'swiper'
 import AMap from 'AMap'
-import { Indicator } from 'mint-ui';
 export default {
     data (){
         return{
@@ -44,11 +43,6 @@ export default {
     props:['id'],
     beforeMount(){
         this.getData()
-    },
-    watch:{
-        BMap:function(){
-            // console.log('aaa')
-        }
     },
     methods: {
         //跳转到景点详情页
@@ -173,6 +167,7 @@ export default {
                 that.center.push([mapData[i].longitude,mapData[i].latitude])
                 let marker = new AMap.Marker({
                     position: [mapData[i].longitude,mapData[i].latitude],
+                    offset: new AMap.Pixel(-5,-5),
                     map: that.BMap,
                     icon:new AMap.Icon({            
                         image: require('../assets/img/Oval 3@3x.png'),
@@ -285,14 +280,13 @@ header{
 #maplist{
     height: 6.67rem;
     width: 100%;
-    position: fixed;
-    bottom: 0;
     z-index: 10;
     position: relative;
 }
 footer{
     position: fixed;
     bottom: 0.25rem;
+    z-index: 200;
 }
 #maplist .button{
     background:#fff;

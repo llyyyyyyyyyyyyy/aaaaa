@@ -109,6 +109,7 @@
 					if (res.data.code != '0') {
 						alert('评论失败！')
 					}
+					console.log(res.data)
             		window.history.back();
 			    })
 			},

@@ -3,7 +3,9 @@
         <div class="sceniccont" v-for="n in POIinfo" :key="n.id" @click="sceClick(n.id)">
             <img :src="n.top_img" alt="">
             <h2>{{n.name}}</h2>
-            <h3>公园 · 绿地</h3>
+            <h3>
+                <i v-for="i in n.natureList" :key="i.id" >{{i.value}} </i>
+            </h3>
             <div class="impression">
                 <p><span>活动亮点：</span>{{n.description150}}</p>
             </div>
@@ -62,6 +64,7 @@ export default {
     color: #3F3F3F;
     height: 0.17rem;
     line-height: 0.17rem;
+    overflow: hidden;
 }
 .sceniccont .impression{
     font-size: 0.12rem;

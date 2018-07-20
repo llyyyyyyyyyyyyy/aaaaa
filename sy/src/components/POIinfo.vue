@@ -2,10 +2,10 @@
     <div class="poiinfo">
         <div id="info">
             <div class="img-box">
-                <img :src="InfoData.top_img" alt="">
+                <img :src="InfoData.top_img+'-Newdeer11.1080'" alt="">
             </div>
             <h2>{{InfoData.name}}</h2>
-            <h3>公园 · 绿地</h3>
+            <h3><i v-for="n in InfoData.natureList" :key="n.id" >{{n.value}} </i></h3>
         </div>
         <main>
             <div class="title">
@@ -31,7 +31,7 @@
                 <h4 v-if="InfoData.guideAddress">
                     <img src="../assets/img/地址 (1)@3x.png" alt="">
                     <span>地址</span>
-                    <i>{{InfoData.guideAddress}}<a id="bt" @click='init(InfoData)'>导航</a></i>
+                    <i>{{InfoData.guideAddress}}<a @click='init(InfoData)'>导航</a></i>
                     
                 </h4>
                 <h4 v-if="InfoData.guideTicket">
@@ -86,6 +86,7 @@
                     <img class="pic" alt="" v-if="item.imgList" v-for="img in item.imgList" :key="img.id" :src="img.imgUrl">
                 </div>
             </div>
+            <h6 v-if="comment.length == 0">还没有评论,快来抢沙发吧！</h6>
             <p class="more" @click="commentNum += 10" v-if="commentNum < comment.length">查看全部精彩评论   ></p>
             <div class="title">
                 <div class="k"></div>
@@ -93,10 +94,10 @@
             </div>
             <div class="swiper-container near">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <img src="n.img">
-                        <p>玉湖村</p>
-                        <span>距离12.8km</span>
+                    <div class="swiper-slide" v-for="n in nearData" :key="n.id">
+                        <img :src='n.img+"-Newdeer11.500"'>
+                        <p>{{n.name}}</p>
+                        <span>距离{{(n.distance/1000000).toFixed(1)}}km</span>
                     </div>
                 </div>
             </div>
@@ -104,6 +105,7 @@
     </div>
 </template>
 <script>
+import { Indicator } from 'mint-ui'
 import AMap from 'AMap'
 export default {
     data(){
@@ -113,15 +115,15 @@ export default {
             comment:[],
             commentNum: 10,
             origin:'',
+            nearData:[]
         }
     },
     props:['id'],
     created(){
-        document.body.scrollTop = '0';
+        // Indicator.open()
     },
     methods: {
          mapClick(){
-             console.log(this.id)
              this.$router.push({path:'/maplist/'+this.id})
          },
         init (obj){
@@ -178,14 +180,18 @@ export default {
             });
             map_a.addControl(new AMap.ToolBar());
         },
-         initSwiper(){
+        initSwiper(){
             let that = this
             this.mySwiper = new Swiper('.swiper-container', {
             resistanceRatio:0.5,
-            spaceBetween : 0,
+            spaceBetween : 8,
             observer:true,
-            slidesPerView: 1,
-            })},
+            slidesPerView :'auto',
+            // loop : true, 
+            // slidesPerview:'auto'
+            })
+            setTimeout(()=>{},50)
+        },
         loadmap(mapData){
             let map = new AMap.Map('container', {
             dragEnable:  false ,
@@ -195,7 +201,7 @@ export default {
             });
             let icon = new AMap.Icon({
                 size: new AMap.Size(30, 30),   // 图标尺寸
-                image:  require('../assets/img/人文@3x.png'),  // Icon的图像
+                image: mapData.icon == 'human'? require('../assets/img/人文@3x.png'): require('../assets/img/自然@3x.png'),  // Icon的图像
                 imageSize: new AMap.Size(30,30)   // 根据所设置的大小拉伸或压缩图片
             });
             let marker = new AMap.Marker({
@@ -206,22 +212,33 @@ export default {
             map.add(marker);
             map.setMapStyle('amap://styles/'+'whitesmoke');
         },
+        //获取页面信息
         getInfo(){
             this.$http.get('http://dev.shunyi.mydeertrip.com:83/scenic_spots/guide',{
                 params:{token:tool.token(),id:this.id
                 }}).then(res=>{
-                    console.log(res.data.data.ss)
                     this.loadmap(res.data.data.ss)
-                    console.log(this.id)
                     this.InfoData = res.data.data.ss
                     this.initSwiper()
                     this.getComment()
+                    this.getNear()
                 })
+                // Indicator.close()
         },
+        //获取评论
         getComment(){
-            this.$http.get('http://dev.shunyi.mydeertrip.com:84/comment/list?itemId='+this.$route.params.id+'&isCream=2&qType=all&start=0&limit=1000&token='+tool.token(),).then(res=>{
-                    console.log(res.data.data)
+            this.$http.get('http://dev.shunyi.mydeertrip.com:84/comment/list?itemId='+this.$route.params.id+'&isCream=2&qType=all&start=0&limit=1000&token='+tool.token()).then(res=>{
                     this.comment = res.data.data.list;
+                    console.log(res.data.data.list)
+            })
+        },
+        //获取附近景点
+        getNear(){
+            this.$http.get('http://dev.shunyi.mydeertrip.com:83/scenic_spots/listNearbyss',{
+                params:{lat:this.InfoData.longitude,lon:this.InfoData.latitude,ssId:536}
+            }).then(res=>{
+                console.log(res.data.data.list)
+                this.nearData = res.data.data.list
             })
         },
          //展开内容
@@ -237,12 +254,17 @@ export default {
     },
     mounted(){
     this.getInfo()
-    console.log(document.body.scrollTop);
     },
     
 }
 </script>
 <style lang='scss' scoped>
+h6{
+    text-align: center;
+    font-size: 0.14rem;
+    font-weight: 900;
+    margin-top:0.2rem;
+}
 #info{
     width: 3.27rem;
     margin: 0.34rem auto 0.3rem;
@@ -352,9 +374,14 @@ main .intrp .unfold{
     min-height: 0.21rem;
 }
 .practical  h4 a{
+    height: 0.16rem;
     color: #119DFF;
     position: absolute;
     right: .3rem;
+    border: 1px solid #119DFF;
+    border-radius: 2px;
+    padding: 0 0.08rem;
+    line-height: 0.16rem;
 }
 .practical .B i{
     color: #119DFF
@@ -406,21 +433,21 @@ main .intrp .unfold{
     margin:0 0 0.4rem 0.48rem;
 }
 .near{
-    height: 2rem;
-    color: #484848;
-} 
-.near img{
-    width: 1.2rem;
-    height: 1.2rem;
-}
-.near p{
-    font-weight: 900;
-    font-size: 0.15rem;
-    margin: 0.08rem 0 0.02rem;
-    line-height: 0.21rem;
-}
-.near span{
-    font-size: 0.13rem;
+        height: 2rem;
+        color: #484848;
+    .contImg{
+        width: 1.20rem;
+    }
+    img{
+        width: 1.20rem;
+        height: 1.20rem;
+    }
+    .name{
+        font-weight: 900;
+    }
+    .swiper-slide{
+        width: 1.2rem !important
+    }
 }
 .map{
     height: 1.09rem;
