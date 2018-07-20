@@ -37,7 +37,8 @@
                 <h4>
                     <img src="../assets/img/地址 (1)@3x.png" alt="">
                     <span>地址</span>
-                    <i>{{InfoData.guideAddress}}</i>
+                    <i>{{InfoData.guideAddress}}<a id="bt" @click='init(InfoData)'>导航</a></i>
+                    
                 </h4>
                 <h4>
                     <img src="../assets/img/icon copy1@3x.png" alt="" >
@@ -114,10 +115,65 @@ export default {
             //评论列表
             comment:[],
             commentNum: 10,
+            origin:'',
         }
     },
     props:['id'],
      methods: {
+        init (obj){
+            var _this = this
+            let mapObj = new AMap.Map('iCenter');
+            mapObj.plugin('AMap.Geolocation', function () {
+                var geolocation = new AMap.Geolocation({
+                    enableHighAccuracy: true,//是否使用高精度定位，默认:true
+                    timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+                    maximumAge: 0,           //定位结果缓存0毫秒，默认：0
+                    convert: true,           //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
+                    showButton: true,        //显示定位按钮，默认：true
+                    buttonPosition: 'LB',    //定位按钮停靠位置，默认：'LB'，左下角
+                    buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+                    showMarker: true,        //定位成功后在定位到的位置显示点标记，默认：true
+                    showCircle: true,        //定位成功后用圆圈表示定位精度范围，默认：true
+                    panToLocation: true,     //定位成功后将定位到的位置作为地图中心点，默认：true
+                    zoomToAccuracy:true      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+                });
+                mapObj.addControl(geolocation);
+                geolocation.getCurrentPosition();
+                AMap.event.addListener(geolocation, 'complete', function(data,a,b){
+                    _this.origin = [data.position.lng,data.position.lat]
+                    console.log(_this.origin)
+
+                    _this.navigat(obj)
+                });//返回定位信息
+                AMap.event.addListener(geolocation, 'error', function(error){
+                    console.log(error)
+                    // alert(error)
+                });      //返回定位出错信息
+
+            });
+        },
+        navigat(data){
+            var _this = this;
+            var destination = [data.longitude.toFixed(6),data.latitude.toFixed(6)]
+            console.log(destination)
+            let map_a = new AMap.Map("mapContainer");
+            AMap.plugin(["AMap.Driving"], function() {
+                var drivingOption = {
+                    policy:AMap.DrivingPolicy.LEAST_TIME,
+                    map:map_a
+                };
+                var driving = new AMap.Driving(drivingOption); //构造驾车导航类
+                //根据起终点坐标规划驾车路线
+                // driving.search([{keyword:'北京站'},{keyword:'北京大学'}],function(status,result){
+                driving.searchOnAMAP({
+                    origin:_this.origin,
+                    destination:destination
+                });
+                // });
+                
+            });
+            map_a.addControl(new AMap.ToolBar());
+        },
          initSwiper(){
             let that = this
             this.mySwiper = new Swiper('.swiper-container', {
@@ -308,6 +364,11 @@ main .intrp .unfold{
     display: inline-block;
     max-width: 2.62rem;
     min-height: 0.21rem;
+}
+.practical  h4 a{
+    color: #119DFF;
+    position: absolute;
+    right: .3rem;
 }
 .practical .B i{
     color: #119DFF
