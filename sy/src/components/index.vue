@@ -1,6 +1,6 @@
 <template>
   <div id="maplist">
-      <header @click="hclick()"></header>
+      <!-- <header @click="hclick()"></header> -->
     <img class="logo" src="../assets/img/logo@3x.png" alt="">
     <div id="container" class="mymap"></div>
     <footer>
@@ -46,12 +46,12 @@ export default {
         let that = this
         setTimeout(()=>{that.BMap.setZoom(10)},1000)
     },
-    beforeUpdate () {
+    // beforeUpdate () {
     //   console.log(this.infoWindow.getIsOpen())  
     //   if(this.infoWindow.getIsOpen()){
     //         this.infoWindow.open(this.BMap, e.target.getPosition());
     //     }
-    },
+    // },
     methods: {
         toInfo(id){
             console.log(id)
@@ -182,9 +182,13 @@ export default {
                 that.mySwiper.slideTo(i)
                 that.swShow = true
                 that.infoWindow.setContent(e.target.content);
-                that.infoWindow.open(that.BMap, e.target.getPosition());   
+                // that.infoWindow.open(that.BMap, e.target.getPosition());   
                 that.BMap.setCenter([mapData[i].longitude,mapData[i].latitude])
                 that.BMap.setZoom(13)
+                console.log(that.infoWindow.getIsOpen())  
+                if(!that.infoWindow.getIsOpen()){
+                    that.infoWindow.open(that.BMap, e.target.getPosition());
+                }
             });
         }
     
@@ -259,10 +263,16 @@ header{
                 bottom: 0.15rem;
                 left:0.2rem
             }
+            .shadow{
+                height: 1.1rem;
+                width: 3.27rem;
+                position: absolute;
+                bottom:0
+            }
         }    
     }
 #maplist{
-    height: 6.17rem;
+    height: 6.67rem;
     width: 100%;
     position: fixed;
     bottom: 0;

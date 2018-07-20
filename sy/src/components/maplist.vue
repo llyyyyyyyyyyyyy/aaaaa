@@ -1,6 +1,6 @@
 <template>
   <div id="maplist">
-      <header @click="hclick()"></header>
+      <!-- <header @click="hclick()"></header> -->
     <img class="logo" src="../assets/img/logo@3x.png" alt="">
     <div id="container" class="mymap"></div>
     <footer>
@@ -174,7 +174,10 @@ export default {
                 let marker = new AMap.Marker({
                     position: [mapData[i].longitude,mapData[i].latitude],
                     map: that.BMap,
-                    icon:require('../assets/img/Oval 3@3x.png'),
+                    icon:new AMap.Icon({            
+                        image: require('../assets/img/Oval 3@3x.png'),
+                        imageSize: new AMap.Size(10,10),
+                    }) 
                 });
                 marker.content = `<div class="mMarker">
                                         <img src=${require('../assets/img/人文@3x.png')}>
@@ -241,6 +244,9 @@ export default {
 header{
     height: 0.44rem;
 }
+.mymap{
+    height: 100%;
+}
 .logo{
     position: fixed;
     top: 0.12rem;
@@ -272,7 +278,7 @@ header{
         }    
     }
 #maplist{
-    height: 6.17rem;
+    height: 6.67rem;
     width: 100%;
     position: fixed;
     bottom: 0;
