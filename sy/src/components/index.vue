@@ -47,7 +47,7 @@ export default {
         setTimeout(()=>{that.BMap.setZoom(10)},1000)
     },
     beforeUpdate () {
-      console.log(this.infoWindow.getIsOpen())  
+    //   console.log(this.infoWindow.getIsOpen())  
     //   if(this.infoWindow.getIsOpen()){
     //         this.infoWindow.open(this.BMap, e.target.getPosition());
     //     }
