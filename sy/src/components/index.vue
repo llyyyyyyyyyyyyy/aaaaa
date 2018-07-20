@@ -1,6 +1,7 @@
 <template>
   <div id="maplist">
-    <header>顺义文创地图</header>
+      <!-- <header @click="hclick()"></header> -->
+    <img class="logo" src="../assets/img/logo@3x.png" alt="">
     <div id="container" class="mymap"></div>
     <footer>
         <div class="button" @click="toList">
@@ -8,16 +9,17 @@
         </div>
       
             <div class="swiperBox">
-                  <!-- <transition leave-active-class="fadeIn" enter-active-class="fadeInDown"> -->
-                <div class="swiper-container" v-show="swShow">                
+                <transition leave-active-class="animated  fadeOutDown" enter-active-class="animated fadeInUp">
+                <div class="swiper-container" v-show="swShow" >                
                     <div class="swiper-wrapper" >
-                        <div class="swiper-slide" v-for="n in this.swiperData" :key="n.id">
+                        <div class="swiper-slide" v-for="n in this.swiperData" :key="n.id" @click="toInfo(n.id)">
                             <img class="city" :src="n.cover_img" alt="" >
+                            <img class="shadow" src="../assets/img/Rectangle@3x.png" alt="" >
                             <h4>{{n.name}}</h4>
                         </div>
                     </div>
                 </div>
-                <!-- </transition> -->
+                </transition>
             </div>
          
     </footer>
@@ -27,10 +29,10 @@
 <script>
 import Swiper from 'swiper'
 import AMap from 'AMap'
+import { Indicator } from 'mint-ui';
 export default {
     data (){
         return{
-            // mapData:[116.708463,40.132709], 
             swiperData:[],
             BMap:[],
             center:[],
@@ -38,11 +40,24 @@ export default {
             swShow:false,
             area:[]
     }},
-    mounted(){
-    this.getData()
-    // this.loadmap()
+    beforeMount(){
+        this.getData()
+        // this.loadmap()
+        let that = this
+        setTimeout(()=>{that.BMap.setZoom(10)},1000)
     },
+    // beforeUpdate () {
+    //   console.log(this.infoWindow.getIsOpen())  
+    //   if(this.infoWindow.getIsOpen()){
+    //         this.infoWindow.open(this.BMap, e.target.getPosition());
+    //     }
+    // },
     methods: {
+        toInfo(id){
+            console.log(id)
+            this.$router.push({path:'/poiinfo/'+id})
+            
+        },
         initSwiper(){
             let that = this
             this.mySwiper = new Swiper('.swiper-container', {
@@ -50,11 +65,11 @@ export default {
             spaceBetween : 12,
             observer:true,
             slidesPerView: 1,
-            // observeParents:true,
+            observeParents:true,
             onSlideChangeEnd() {
                 that.BMap.setCenter(that.center[that.mySwiper.activeIndex])
                 that.infoWindow.open(that.BMap,that.center[that.mySwiper.activeIndex])
-                that.infoWindow.setContent(that.BMap.getAllOverlays('marker')[that.mySwiper.activeIndex].content)
+                
                 }
             })
         },
@@ -67,16 +82,15 @@ export default {
                 this.initSwiper()
                 this.loadmap(res.data.data.regionDetail[0].ssList)
                 this.swiperData =  res.data.data.regionDetail[0].ssList
-                //点击地图 swiper消失
+                //绑定点击地图 swiper消失
                 this.BMap.on('click',()=>{if(this.infoWindow.getIsOpen()){
                     this.swShow = !this.swShow
                 }})
                 this.area = this.BMap.getBounds()
-                
                 this.BMap.setLimitBounds(this.area)
             })
         },
-        //页面跳转
+        //跳转列表页
         toList(){
             this.$router.push({path:'/poilist'})
         },
@@ -114,8 +128,8 @@ export default {
                     strokeColor: "#ccc", //线颜色
                     strokeOpacity: 1, //线透明度
                     strokeWeight: 1, //线宽
-                    fillColor: "#999", //填充色
-                    fillOpacity: 0.55, //填充透明度
+                    fillColor: "#ddd", //填充色
+                    fillOpacity: 0.5, //填充透明度
                 };
             });
         }
@@ -150,29 +164,33 @@ export default {
             isCustom:true
         });
         console.log(mapData)
-        // that.center = []
         for (let i = 0 ; i < mapData.length; i++) {
             that.center.push([mapData[i].longitude,mapData[i].latitude])
             let marker = new AMap.Marker({
-                // position: lnglats[i],
                 position: [mapData[i].longitude,mapData[i].latitude],
                 map: that.BMap,
-                icon:require('../assets/img/Oval 3@3x.png'),
+                icon:new AMap.Icon({            
+                    image: require('../assets/img/Oval 3@3x.png'),
+                    imageSize: new AMap.Size(10,10),
+                }) 
             });
             marker.content = `<div class="mMarker">
-                                <img src=${require('../assets/img/人文@3x.png')}>
-                                <i>${mapData[i].name}</i>
-                            </div>`;
+                                    <img src=${require('../assets/img/人文@3x.png')}>
+                                    <i>${mapData[i].name}</i>
+                                </div>`;
             marker.on('click', function (e) {
                 that.mySwiper.slideTo(i)
                 that.swShow = true
                 that.infoWindow.setContent(e.target.content);
-                that.infoWindow.open(that.BMap, e.target.getPosition());
+                // that.infoWindow.open(that.BMap, e.target.getPosition());   
                 that.BMap.setCenter([mapData[i].longitude,mapData[i].latitude])
+                that.BMap.setZoom(13)
+                console.log(that.infoWindow.getIsOpen())  
+                if(!that.infoWindow.getIsOpen()){
+                    that.infoWindow.open(that.BMap, e.target.getPosition());
+                }
             });
-            // marker.emit('click', {target: marker});
         }
-
     
         that.BMap.setFitView();
         function initPage(DistrictExplorer) {
@@ -199,8 +217,8 @@ export default {
                         strokeColor: '#ccc', //线颜色
                         strokeOpacity: 1, //线透明度
                         strokeWeight: 1, //线宽
-                        fillColor: '#999', //填充色
-                        fillOpacity: 0.85, //填充透明度
+                        fillColor: '#ddd', //填充色
+                        fillOpacity: 0.5, //填充透明度
                         map: that.BMap,
                         path: path
                     });
@@ -214,6 +232,17 @@ export default {
 
 
 <style lang="scss" scoped>
+header{
+    height: 0.44rem;
+}
+.logo{
+    position: fixed;
+    top: 0.12rem;
+    left: 0.12rem;
+    height: 1.15rem;
+    width: 1.15rem;
+    z-index: 200;
+}
  .swiperBox{
         width: 3.75rem;
         z-index: 300;
@@ -224,9 +253,8 @@ export default {
         .swiper-slide{
             color: #fff;
             height: 1.5rem;
-            background: #ccc;
             position: relative;
-            img{
+            .city{
                 width: 3.27rem;
                 height: 1.5rem;
             }
@@ -235,28 +263,26 @@ export default {
                 bottom: 0.15rem;
                 left:0.2rem
             }
+            .shadow{
+                height: 1.1rem;
+                width: 3.27rem;
+                position: absolute;
+                bottom:0
+            }
         }    
     }
 #maplist{
-    height: 6.17rem;
+    height: 6.67rem;
     width: 100%;
     position: fixed;
     bottom: 0;
     z-index: 10;
     position: relative;
 }
-header{
-    height: 0.44rem;
-    font-size: 0.17rem;
-    text-align: center;
-    line-height: 0.44rem;
-    font-weight: 900;
-    color: #484848;
-    border-bottom: 0.01rem solid #EEEEEE;
-}
 footer{
     position: fixed;
     bottom: 0.25rem;
+    z-index: 200;
 }
 #maplist .button{
     background:#fff;
@@ -278,32 +304,19 @@ footer{
         left:0.14rem;
     }
 }
-//  .fade-enter-active, .fade-leave-active {
-//           transition: opacity 5s
-//         }
-//         .fade-enter, .fade-leave-active {
-//           opacity: 0
-//         }
-
 
 </style>
 <style lang="scss">
-.amap-icon{
-    img{
-        height: 0.09rem;
-        width:0.09rem;
-        position: relative;
-    }
-}
 .mMarker{
     background:#EAC454;
     padding:0 0.12rem 0 0;
     border:1px solid #fff;
-    border-radius: 0.165rem;
+    border-radius: 0.17rem;
     height: 0.34rem;
     max-width: 1.19rem;
-        display: flex;
-        overflow: hidden;
+    display: flex;
+    overflow: hidden;
+    align-items:center;
         img{
             height: 0.34rem;
             width: 0.33rem;
@@ -313,13 +326,7 @@ footer{
             display:flex;
             font-size:0.1rem;
             color:#fff;
-            height: 0.28rem;
         } 
 }
-.amap-info-close{
-    display: none;
-}
-.amap-info-sharp{
-    display: none;
-}
+
 </style>

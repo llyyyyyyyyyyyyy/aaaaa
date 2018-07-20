@@ -28,6 +28,12 @@ export default new Router({
       props:true
     },
     {
+      path:'/maplist/:id',
+      name:'maplist',
+      component:maplist,
+      props:true
+    },
+    {
       path: '/comment/:name/:id',
       name: 'comment',
       component: comment,

@@ -7,7 +7,6 @@
 				</span>
 				<span class="title">写评论</span>
 				<span class="release" @click="submit">发布</span>
-				<!-- <input class="release" type="submit" value="发布"> -->
 			</div>
 			<div id="text">
 		        <p class="all" v-if="pf">
@@ -39,7 +38,7 @@
 			<p class="p"></p>
 
 			<div class="imgs">
-				<div class="imgBox" v-for="(img,index) in imgArr"  v-if="imgArr.length>0">
+				<div class="imgBox" v-for="(img,index) in imgArr"  v-if="imgArr.length>0" :key="index">
 					<img :src="img" alt="">
 					<span @click="delImg(index)">一</span>
 				</div>

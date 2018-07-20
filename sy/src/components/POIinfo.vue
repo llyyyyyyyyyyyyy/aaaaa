@@ -1,7 +1,7 @@
 <template>
     <div class="poiinfo">
-        <header>顺义文创中心</header>
         <div id="info">
+<<<<<<< HEAD
             <div class="swiperBox">
                 <div class="swiper-container">                
                     <div class="swiper-wrapper" >
@@ -10,6 +10,10 @@
                         </div>
                     </div>
                 </div>
+=======
+            <div class="img-box">
+                <img :src="InfoData.top_img" alt="">
+>>>>>>> master
             </div>
             <h2>{{InfoData.name}}</h2>
             <h3>公园 · 绿地</h3>
@@ -32,6 +36,7 @@
             </div>
             <div class="map">
                 <div id="container"></div>
+                <div class="shadow" @click="mapClick()"></div>
             </div>
             <div class="practical">
                 <h4>
@@ -47,7 +52,7 @@
                 <h4>
                     <img src="../assets/img/icon copy@3x.png" alt="">
                     <span>时间</span>
-                    <i>{{InfoData.guideBestTime}}</i>
+                    <i>{{InfoData.guideOpenTime}}</i>
                 </h4>
                 <h4>
                     <img src="../assets/img/交通 copy@3x.png" alt="">
@@ -62,12 +67,12 @@
                 <h4 class="B">
                     <img src="../assets/img/网址@3x.png" alt="">
                     <span>网站</span>
-                    <i>http://www.sclgh.cn</i>
+                    <i>{{InfoData.guideWebsite}}</i>
                 </h4>
                 <h4 class="B">
                     <img src="../assets/img/电话@3x.png" alt="">
                     <span>电话</span>
-                    <i>0834-6390322；0834-6390302</i>
+                    <i>{{InfoData.guidePhone}}</i>
                 </h4>
             </div>
             <div class="title">
@@ -75,6 +80,7 @@
                 <h3>景点评论</h3>
                 <router-link :to="{ name: 'comment', params:{ name: `${InfoData.name}`, id:InfoData.id } }">写评论</router-link>
             </div>
+<<<<<<< HEAD
             <div class="comment" v-for="(item,index) in comment" :key="item.id" v-if="index < commentNum">
                 <h5>
                     <img :src="item.photo" alt="">
@@ -89,6 +95,22 @@
                 </div>
             </div>
             <p class="more" @click="commentNum += 10" v-if="commentNum < comment.length">查看全部精彩评论   ></p>
+=======
+            <div class="commentBox">
+                <div class="comment">
+                    <h5>
+                        <img src="" alt="">
+                        <span>aimee叮叮叮</span>
+                        <i>2017-04-10</i>
+                    </h5>
+                    <p class=".cont">
+                        很美很美！即使已经离开数天，泸沽湖的美还深深印刻在我的脑海里！洱海的美不及泸沽湖之万一。希望在以后有机会能够呆上一周甚至更长时间
+                    </p>
+                    <img class="pic" alt="" src="">
+                </div>
+                <p class="more">查看全部精彩评论   ></p>
+            </div>
+>>>>>>> master
             <div class="title">
                 <div class="k"></div>
                 <h3>附近景点</h3>
@@ -117,12 +139,19 @@ export default {
         }
     },
     props:['id'],
-     methods: {
+    created(){
+        document.body.scrollTop = '0';
+    },
+    methods: {
+         mapClick(){
+             console.log(this.id)
+             this.$router.push({path:'/maplist/'+this.id})
+         },
          initSwiper(){
             let that = this
             this.mySwiper = new Swiper('.swiper-container', {
             resistanceRatio:0.5,
-            spaceBetween : 12,
+            spaceBetween : 0,
             observer:true,
             slidesPerView: 1,
             })},
@@ -150,6 +179,7 @@ export default {
             this.$http.get('http://dev.shunyi.mydeertrip.com:83/scenic_spots/guide',{
                 params:{token:tool.token(),id:this.id
                 }}).then(res=>{
+<<<<<<< HEAD
                     console.log(res.data.data.ss)
                     this.loadmap(res.data.data.ss)
                     console.log(this.id)
@@ -162,6 +192,12 @@ export default {
             this.$http.get('http://dev.shunyi.mydeertrip.com:84/comment/list?itemId='+this.$route.params.id+'&isCream=2&qType=all&start=0&limit=1000&token='+tool.token(),).then(res=>{
                     console.log(res.data.data)
                     this.comment = res.data.data.list;
+=======
+                this.loadmap(res.data.data.ss)
+                // console.log(this.id)
+                this.InfoData = res.data.data.ss
+                this.initSwiper()
+>>>>>>> master
             })
         },
          //展开内容
@@ -177,7 +213,7 @@ export default {
     },
     mounted(){
     this.getInfo()
-
+    console.log(document.body.scrollTop);
     },
     
 }
@@ -188,39 +224,15 @@ export default {
     margin: 0.34rem auto 0.3rem;
     overflow: hidden;
 }
-.swiperBox{
+.img-box{
         height: 3.27rem;
         width: 3.27rem;
         overflow: hidden;
-        .swiper-wrapper{
-            width: 3.27rem;
-        }
-        .swiper-slide{
-            color: #fff;
-            height: 3.27rem;
-            background: #ccc;
-            position: relative;
             img{
                 width: 3.27rem;
                 height: 3.27rem;
-            }
-            h4{
-                position: absolute;
-                bottom: 0.15rem;
-                left:0.2rem
-            }
-        }    
+            }   
     }
-// #info .swiperBox{
-//     height: 3.27rem;
-//     width: 3.27rem;
-//     overflow: hidden;
-// }
-// #info .swiperBox img{
-//     width: auto;
-//     height: 100%;
-//     background: red
-// }
 #info h2{
     color: #484848;
     font-size:0.24rem;
@@ -377,15 +389,14 @@ main .intrp .unfold{
 }
 .map{
     height: 1.09rem;
-    width: 3.27rem
-}
-header{
-    height: 0.44rem;
-    font-size: 0.17rem;
-    text-align: center;
-    line-height: 0.44rem;
-    font-weight: 900;
-    color: #484848;
-    border-bottom: 0.01rem solid #EEEEEE;
+    width: 3.27rem;
+    position: relative;
+    .shadow{
+        height: 1.09rem;
+        width: 3.27rem;
+        position: absolute;
+        top:0;
+        z-index: 300;
+    }
 }
 </style>
