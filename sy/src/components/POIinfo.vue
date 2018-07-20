@@ -5,8 +5,8 @@
             <div class="swiperBox">
                 <div class="swiper-container">                
                     <div class="swiper-wrapper" >
-                        <div class="swiper-slide" v-for="n in this.InfoData" :key="n.id">
-                            <img class="city" :src="n.cover_img" alt="" >
+                        <div class="swiper-slide" :key="InfoData.id">
+                            <img class="city" :src="InfoData.cover_img" alt="" >
                         </div>
                     </div>
                 </div>
@@ -75,18 +75,20 @@
                 <h3>景点评论</h3>
                 <router-link :to="{ name: 'comment', params:{ name: `${InfoData.name}`, id:InfoData.id } }">写评论</router-link>
             </div>
-            <div class="comment">
+            <div class="comment" v-for="(item,index) in comment" :key="item.id" v-if="index < commentNum">
                 <h5>
-                    <img src="" alt="">
-                    <span>aimee叮叮叮</span>
-                    <i>2017-04-10</i>
+                    <img :src="item.photo" alt="">
+                    <span>{{item.nickName}}</span>
+                    <i>{{item.createTime}}</i>
                 </h5>
                 <p class=".cont">
-                    很美很美！即使已经离开数天，泸沽湖的美还深深印刻在我的脑海里！洱海的美不及泸沽湖之万一。希望在以后有机会能够呆上一周甚至更长时间
+                    {{item.commentDesp}}
                 </p>
-                <img class="pic" alt="" src="">
+                <div class="imgBox">
+                    <img class="pic" alt="" v-if="item.imgList" v-for="img in item.imgList" :key="img.id" :src="img.imgUrl">
+                </div>
             </div>
-            <p class="more">查看全部精彩评论   ></p>
+            <p class="more" @click="commentNum += 10" v-if="commentNum < comment.length">查看全部精彩评论   ></p>
             <div class="title">
                 <div class="k"></div>
                 <h3>附近景点</h3>
@@ -94,7 +96,7 @@
             <div class="swiper-container near">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
-                        <img src="n.img ">
+                        <img src="n.img">
                         <p>玉湖村</p>
                         <span>距离12.8km</span>
                     </div>
@@ -108,7 +110,10 @@ import AMap from 'AMap'
 export default {
     data(){
         return{
-            InfoData:[]
+            InfoData:[],
+            //评论列表
+            comment:[],
+            commentNum: 10,
         }
     },
     props:['id'],
@@ -143,12 +148,20 @@ export default {
         },
         getInfo(){
             this.$http.get('http://dev.shunyi.mydeertrip.com:83/scenic_spots/guide',{
-                params:{token:'e288cdc4355f3704f8efaef76347b3df',id:this.id
+                params:{token:tool.token(),id:this.id
                 }}).then(res=>{
-                this.loadmap(res.data.data.ss)
-                console.log(this.id)
-                this.InfoData = res.data.data.ss
-                this.initSwiper()
+                    console.log(res.data.data.ss)
+                    this.loadmap(res.data.data.ss)
+                    console.log(this.id)
+                    this.InfoData = res.data.data.ss
+                    this.initSwiper()
+                    this.getComment()
+                })
+        },
+        getComment(){
+            this.$http.get('http://dev.shunyi.mydeertrip.com:84/comment/list?itemId='+this.$route.params.id+'&isCream=2&qType=all&start=0&limit=1000&token='+tool.token(),).then(res=>{
+                    console.log(res.data.data)
+                    this.comment = res.data.data.list;
             })
         },
          //展开内容
@@ -225,6 +238,7 @@ main{
     margin: 0 auto;
 }
 main .title{
+    margin-top: .5rem;
     line-height: 0.24rem;
     margin-bottom: 0.12rem;
     position: relative;
@@ -304,6 +318,16 @@ main .intrp .unfold{
     color: #484848;
     margin:0.36rem 0 0  0.48rem;
 }
+.comment .imgBox{
+    width: 2.85rem;
+    display: flex;
+    flex-wrap: wrap;
+}
+.comment .imgBox img{
+    width: .8rem;
+    height: .8rem;
+    margin: .05rem;
+}
 .comment h5 img{
     margin-left: -0.48rem;
     height: 0.4rem;
@@ -332,7 +356,7 @@ main .intrp .unfold{
     color: #119DFF;
     font-size: 0.14rem;
     line-height: 0.24rem;
-    margin:0.33rem 0 0.4rem 0.48rem;
+    margin:0 0 0.4rem 0.48rem;
 }
 .near{
     height: 2rem;

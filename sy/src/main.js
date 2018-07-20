@@ -23,9 +23,9 @@ window.tool = {}
 window.tool.token = function() {
 	let token = localStorage.getItem('token')
 	if (!token || token === 'undefined') {
-		// if (debug) {
-		// 	return 'test'
-		// }
+		if (debug) {
+			return 'e288cdc4355f3704f8efaef76347b3df'
+		}
 		// router.replace({ path: '/author' });
 		return false;
 	};

@@ -33,7 +33,7 @@
 		          <span v-if="pfNum==5">超级赞</span>
 		          <span class="right"></span>
 		        </p>
-				<textarea rows="6" name="comment" id="textarea" v-model="releaseData.comment" onfocus="if(value=='分享您的评论 (至少15个字)'){value=''}" onblur="if (value ==''){value='分享您的评论 (至少15个字)'}">分享您的评论 (至少15个字)</textarea>
+				<textarea rows="6" name="comment" id="textarea" v-model="releaseData.comment" onfocus="if(value=='分享您的评论(至少15个字)'){value=''}" onblur="if (value ==''){value='分享您的评论(至少15个字)'}">分享您的评论 (至少15个字)</textarea>
 				<span class="name">{{names}}</span>
 			</div>
 			<p class="p"></p>
@@ -69,7 +69,7 @@
 					itemId:'',
 					itemName:this.names,
 					itemType:'1',
-					comment:'',
+					comment:'分享您的评论(至少15个字)',
 					token:localStorage.getItem('token'),
 				},
 				inputtext:{},
@@ -106,7 +106,10 @@
 				let config = {
             		headers:{'Content-Type':'multipart/form-data'}
 			    };  //添加请求头
-				this.$ajax.post('/api'+this.commentUrl, this.formData,config).then(function (res) {
+				this.$http.post('http://dev.shunyi.mydeertrip.com:84'+this.commentUrl, this.formData,config).then(function (res) {
+					if (res.data.code != '0') {
+						alert('评论失败！')
+					}
             		window.history.back();
 			    })
 			},

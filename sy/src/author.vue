@@ -36,7 +36,7 @@ export default {
           .then(({ data }) => {
             if(data.code == '0'){
               console.log(data)
-              document.querySelector('#author').innerHTML = JSON.stringify(data);
+              // document.querySelector('#author').innerHTML = JSON.stringify(data);
 
               var result = data.data;
               localStorage.setItem('token', result.token);
@@ -44,12 +44,12 @@ export default {
               localStorage.setItem('nickName', result.user.nickName);
               localStorage.setItem('personSign', result.user.personSign);
               localStorage.setItem('photo', result.user.photo || '');
-
-              if(tool.cookie.set('beforeLoginUrl')){
-                _this.$router.replace(tool.cookie.set('beforeLoginUrl'));
-              }else{
-                _this.$router.replace('/');
-              }
+              _this.$router.replace('/');
+              // if(tool.cookie.set('beforeLoginUrl')){
+              //   _this.$router.replace(tool.cookie.set('beforeLoginUrl'));
+              // }else{
+              //   _this.$router.replace('/');
+              // }
             }else{
               console.log(data.msg);
               alert(data.msg);
