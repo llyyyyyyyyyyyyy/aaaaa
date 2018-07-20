@@ -46,12 +46,6 @@ export default {
         let that = this
         setTimeout(()=>{that.BMap.setZoom(10)},1000)
     },
-    // beforeUpdate () {
-    //   console.log(this.infoWindow.getIsOpen())  
-    //   if(this.infoWindow.getIsOpen()){
-    //         this.infoWindow.open(this.BMap, e.target.getPosition());
-    //     }
-    // },
     methods: {
         toInfo(id){
             console.log(id)
@@ -67,11 +61,19 @@ export default {
             slidesPerView: 1,
             observeParents:true,
             onSlideChangeEnd() {
+                that.BMap.setZoom(13)
                 that.BMap.setCenter(that.center[that.mySwiper.activeIndex])
                 that.infoWindow.open(that.BMap,that.center[that.mySwiper.activeIndex])
-                
-                }
+                that.infoWindow.setContent(that.BMap.getAllOverlays('marker')[that.mySwiper.activeIndex].content)
+                },
+            // onTransitionEnd() {
+            //     that.BMap.setZoom(13)
+            //     that.BMap.setCenter(that.center[that.mySwiper.activeIndex])
+            //     that.infoWindow.open(that.BMap,that.center[that.mySwiper.activeIndex])
+            //     that.infoWindow.setContent(that.BMap.getAllOverlays('marker')[that.mySwiper.activeIndex].content)
+            //     }
             })
+            
         },
         //获取数据
         getData(){
@@ -185,9 +187,10 @@ export default {
                 // that.infoWindow.open(that.BMap, e.target.getPosition());   
                 that.BMap.setCenter([mapData[i].longitude,mapData[i].latitude])
                 that.BMap.setZoom(13)
-                console.log(that.infoWindow.getIsOpen())  
+                // console.log(that.infoWindow.getIsOpen())
                 if(!that.infoWindow.getIsOpen()){
                     that.infoWindow.open(that.BMap, e.target.getPosition());
+                    // that.infoWindow.setContent(e.target.content);
                 }
             });
         }

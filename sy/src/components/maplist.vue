@@ -65,7 +65,7 @@ export default {
             observer:true,
             slidesPerView: 1,
             observeParents:true,
-            onSlideChangeEnd() {
+            onTransitionEnd() {
                 that.BMap.setZoom(13)
                 that.BMap.setCenter(that.center[that.mySwiper.activeIndex])
                 that.infoWindow.open(that.BMap,that.center[that.mySwiper.activeIndex])
@@ -187,9 +187,14 @@ export default {
                     that.mySwiper.slideTo(i)
                     that.swShow = true
                     that.infoWindow.setContent(e.target.content);
-                    that.infoWindow.open(that.BMap, e.target.getPosition());
+                    // that.infoWindow.open(that.BMap, e.target.getPosition());   
                     that.BMap.setCenter([mapData[i].longitude,mapData[i].latitude])
                     that.BMap.setZoom(13)
+                    // console.log(that.infoWindow.getIsOpen())
+                    if(!that.infoWindow.getIsOpen()){
+                        that.infoWindow.open(that.BMap, e.target.getPosition());
+                        // that.infoWindow.setContent(e.target.content);
+                    }
                 });
             }
             //加载对应信息窗体
@@ -197,7 +202,7 @@ export default {
                 if(mapData[i].id == that.id){
                     that.infoWindow.open(that.BMap,that.center[i])
                     that.infoWindow.setContent(that.BMap.getAllOverlays('marker')[i].content)
-                    that.initSwiper(i,)   
+                    that.initSwiper(i)   
                 }
             }
             
