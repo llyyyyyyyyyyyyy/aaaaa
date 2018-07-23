@@ -10,7 +10,7 @@
         <main>
             <div class="title">
                 <div class="k"></div>
-                <h3>活动介绍</h3>
+                <h3 @click="aaaclick()">活动介绍</h3>
             </div>
             <div class="pSty"  >
                 <p><span>印象：</span>{{InfoData.description150}}</p>
@@ -62,7 +62,7 @@
                 <h4 class="B" v-if="InfoData.guidePhone">
                     <img src="../assets/img/电话@3x.png" alt="">
                     <span>电话</span>
-                    <i>{{InfoData.guidePhone}}</i>
+                    <a href="tel:InfoData.guidePhone"><i>{{InfoData.guidePhone}}</i></a>
                 </h4>
             </div>
             <div class="title">
@@ -99,7 +99,7 @@
             </div>
             <div class="swiper-container near">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide" v-for="n in nearData" :key="n.id">
+                    <div class="swiper-slide" v-for="n in nearData" :key="n.id" @click="nearClick(n.id)">
                         <img :src='n.img+"-Newdeer11.500"'>
                         <p>{{n.name}}</p>
                         <span>距离{{(n.distance/1000000).toFixed(1)}}km</span>
@@ -125,13 +125,24 @@ export default {
     },
     props:['id'],
     created(){
-        console.log(this.$refs.intrpInfo)
-    //    document.documentElement.scrollTop = '0'
+    //   console.log(document.getElementsByClassName('img-box'))
+    //   document.getElementsByClassName('img-box').scrollTop = 0
+    },
+    watch: {
+          // 如果路由有变化，会再次执行该方法
+          "$route": "getInfo"
     },
     methods: {
-         mapClick(){
+        aaaclick(){
+            alert(document.documentElement.scrollTop)
+        },
+        mapClick(){
              this.$router.push({path:'/maplist/'+this.id})
          },
+        nearClick(nearid){
+            // console.log('go')
+            this.$router.push({path:'/poiinfo/'+nearid})
+        },
         init (obj){
             var _this = this
             let mapObj = new AMap.Map('iCenter');
@@ -196,7 +207,7 @@ export default {
             })
             setTimeout(()=>{
                 document.getElementsByClassName('swiper-wrapper')[0].style.transform="translate3d(0px,0px,0px)"
-            },100)
+            },500)
         },
         loadmap(mapData){
             let map = new AMap.Map('container', {
@@ -259,6 +270,7 @@ export default {
     },
     mounted(){
     this.getInfo()
+    setTimeout(()=>{console.log(document.getElementsByClassName('intrpInfo'))},1000) 
     },
     
 }
@@ -444,7 +456,7 @@ main .unfold{
     color: #119DFF;
     font-size: 0.14rem;
     line-height: 0.24rem;
-    margin:0 0 0.4rem 0.48rem;
+    margin:0.33rem 0 0.4rem 0.48rem;
 }
 .near{
         height: 2rem;

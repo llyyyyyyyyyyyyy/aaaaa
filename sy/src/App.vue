@@ -17,6 +17,6 @@ export default {
 
 <style>
 #app{
-  height: 100%
+  height: 100%;
 }
 </style>

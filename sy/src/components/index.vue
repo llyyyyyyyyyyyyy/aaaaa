@@ -1,6 +1,6 @@
 <template>
   <div id="maplist">
-      <!-- <header @click="hclick()" ref="he" style="height:20px"></header> -->
+    <!-- <header @click="hclick()" ref="he" style="height:20px"></header> -->
     <img class="logo" src="../assets/img/logo@3x.png" alt="">
     <div id="container"></div>
     <footer>
