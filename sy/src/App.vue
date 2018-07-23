@@ -6,13 +6,7 @@
 
 <script>
 export default {
-  name: 'App',
-  watch:{
-      '$route':function(to,from){
-          document.documentElement.scrollTop= '0';
-          window.pageYOffset = '0'
-      }
-  }
+  name: 'App'
 }
 </script>
 

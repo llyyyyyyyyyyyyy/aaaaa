@@ -10,47 +10,59 @@ import photoPage from '../components/photoPage/photoPage.vue'
 
 Vue.use(Router)
 
-export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'Index',
-      component: Index
-    },
-    {
-      path: '/poilist',
-      name: 'POIlist',
-      component: POIlist
-    },
-    {
-      path: '/poiinfo/:id',
-      name: 'POIinfo',
-      component: POIinfo,
-      props:true
-    },
-    {
-      path:'/maplist/:id',
-      name:'maplist',
-      component:maplist,
-      props:true
-    },
-    {
-      path: '/comment/:name/',
-      name: 'comment',
-      component: comment,
-      props:true
-    },
-    {
-      path: '/author',
-      name: 'author',
-      component: author,
-      props:true
-    },
-    {
-      path: '/photoPage',
-      name: 'photoPage',
-      component: photoPage,
-      props:true
+
+
+  const router = new Router({
+    routes: [
+      {
+        path: '/',
+        name: 'Index',
+        component: Index
+      },
+      {
+        path: '/poilist',
+        name: 'POIlist',
+        component: POIlist
+      },
+      {
+        path: '/poiinfo/:id',
+        name: 'POIinfo',
+        component: POIinfo,
+        props:true
+      },
+      {
+        path:'/maplist/:id',
+        name:'maplist',
+        component:maplist,
+        props:true
+      },
+      {
+        path: '/comment/:name/',
+        name: 'comment',
+        component: comment,
+        props:true
+      },
+      {
+        path: '/author',
+        name: 'author',
+        component: author,
+        props:true
+      },
+      {
+        path: '/photoPage',
+        name: 'photoPage',
+        component: photoPage,
+        props:true
+      }
+    ],
+    scrollBehavior(to, from, savedPosition) {
+
+      if (savedPosition) {
+        return savedPosition
+      } else {
+        return {x: 0, y: 0}
+      }
     }
-  ]
-})
+  });
+
+export default router
