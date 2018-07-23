@@ -3,94 +3,37 @@
       <!-- <header @click="hclick()"></header> -->
     <img class="logo" src="../assets/img/logo@3x.png" alt="">
     <div id="container" class="mymap"></div>
-    <footer>
-        <div class="button" @click="toList">
-            <img src="../assets/img/Shape@3x.png" alt=""> 切换列表
-        </div>
-      
-            <div class="swiperBox">
-                <transition leave-active-class="animated  fadeOutDown" enter-active-class="animated fadeInUp">
-                <div class="swiper-container" v-show="swShow" >                
-                    <div class="swiper-wrapper" >
-                        <div class="swiper-slide" v-for="n in this.swiperData" :key="n.id" @click="toInfo(n.id)">
-                            <img class="city" :src="n.cover_img+'-Newdeer21'" alt="" >
-                            <img class="shadow" src="../assets/img/Rectangle@3x.png" alt="" >
-                            <h4>{{n.name}}</h4>
-                        </div>
-                    </div>
-                </div>
-                </transition>
-            </div>
-         
-    </footer>
   </div>
   
 </template>
 <script>
-import Swiper from 'swiper'
 import AMap from 'AMap'
 export default {
     data (){
         return{
-            swiperData:[],
             BMap:[],
             center:[],
             InfoWindow:[],
-            swShow:true,
             area:[],
-            zoom:[]
+            zoom:[],
+            num:[]
     }},
     props:['id'],
     beforeMount(){
         this.getData()
+        setTimeout(()=>{this.infoWindow.open(this.BMap,this.center[this.num])},500) 
     },
     methods: {
-        //跳转到景点详情页
-        toInfo(id){
-            console.log(id)
-            this.$router.push({path:'/poiinfo/'+id})
-        },
-        //实例化swiper及相关的地图配置
-        initSwiper(i){
-            let that = this
-            this.mySwiper = new Swiper('.swiper-container', {
-            resistanceRatio:0.5,
-            spaceBetween : 12,
-            observer:true,
-            slidesPerView: 1,
-            observeParents:true,
-            onTransitionEnd() {
-                that.BMap.setZoom(13)
-                that.BMap.setCenter(that.center[that.mySwiper.activeIndex])
-                that.infoWindow.open(that.BMap,that.center[that.mySwiper.activeIndex])
-                that.infoWindow.setContent(that.BMap.getAllOverlays('marker')[that.mySwiper.activeIndex].content)
-                }
-            })
-            this.mySwiper.slideTo(i)
-            if(i == 0){
-                        setTimeout(()=>{that.BMap.setZoomAndCenter(13,[that.swiperData[0].longitude,that.swiperData[0].latitude])},500)
-                    }
-                    
-        },
         //获取数据
         getData(){
             this.$http.get('http://dev.shunyi.mydeertrip.com:83/plan/sslist',{
                 params:{cursor:1,limit:100,regionIds:546
                 }}).then(res=>{
-
                 this.loadmap(res.data.data.regionDetail[0].ssList)
-                this.swiperData =  res.data.data.regionDetail[0].ssList
-                //绑定点击地图 swiper消失
-                this.BMap.on('click',()=>{if(this.infoWindow.getIsOpen()){
-                    this.swShow = !this.swShow
-                }})
                 this.area = this.BMap.getBounds()
                 this.BMap.setLimitBounds(this.area)
+                
             })
-        },
-        //跳转列表页
-        toList(){
-            this.$router.push({path:'/poilist'})
         },
         //地图实例化
         loadmap(mapData){
@@ -163,14 +106,19 @@ export default {
                 autoMove:true,
             });
             console.log(mapData)
-            for (let i = 0 ; i < mapData.length; i++) {
-                that.center.push([mapData[i].longitude,mapData[i].latitude])
+            //加载对应信息窗体
+            for ( let i = 0; i < mapData.length;i++){
+                if(mapData[i].id == that.id){
+                    that.num = i
+                    that.infoWindow.open(that.BMap,that.center[i])
+                    // that.infoWindow.setContent(that.BMap.getAllOverlays('marker')[i].content)
+                    that.center.push([mapData[i].longitude,mapData[i].latitude])
                 let marker = new AMap.Marker({
                     position: [mapData[i].longitude,mapData[i].latitude],
                     offset: new AMap.Pixel(-5,-5),
                     map: that.BMap,
                     icon:new AMap.Icon({            
-                        image: require('../assets/img/Oval 3@3x.png'),
+                        image:mapData[i].icon=='human'? require('../assets/img/Oval 7@3x.png') : require('../assets/img/Oval 3@3x.png'),                        
                         imageSize: new AMap.Size(10,10),
                     }) 
                 });
@@ -179,25 +127,10 @@ export default {
                                         <i>${mapData[i].name}</i>
                                     </div>`;
                 marker.on('click', function (e) {
-                    that.mySwiper.slideTo(i)
-                    that.swShow = true
                     that.infoWindow.setContent(e.target.content);
-                    // that.infoWindow.open(that.BMap, e.target.getPosition());   
                     that.BMap.setCenter([mapData[i].longitude,mapData[i].latitude])
-                    that.BMap.setZoom(13)
-                    // console.log(that.infoWindow.getIsOpen())
-                    if(!that.infoWindow.getIsOpen()){
-                        that.infoWindow.open(that.BMap, e.target.getPosition());
-                        // that.infoWindow.setContent(e.target.content);
-                    }
+                    that.infoWindow.open(that.BMap, e.target.getPosition());                
                 });
-            }
-            //加载对应信息窗体
-            for ( let i = 0; i < mapData.length;i++){
-                if(mapData[i].id == that.id){
-                    that.infoWindow.open(that.BMap,that.center[i])
-                    that.infoWindow.setContent(that.BMap.getAllOverlays('marker')[i].content)
-                    that.initSwiper(i)   
                 }
             }
             
@@ -255,60 +188,13 @@ header{
     width: 1.15rem;
     z-index: 200;
 }
- .swiperBox{
-        width: 3.75rem;
-        // z-index: 9999999;
-        .swiper-wrapper{
-            margin-left:0.24rem;
-            width: 3.27rem;
-        }
-        .swiper-slide{
-            color: #fff;
-            height: 1.5rem;
-            position: relative;
-            .city{
-                width: 3.27rem;
-                height: 1.5rem;
-            }
-            h4{
-                position: absolute;
-                bottom: 0.15rem;
-                left:0.2rem
-            }
-        }    
-    }
+
 #maplist{
-    height: 6.67rem;
+    height:100%;
     width: 100%;
     z-index: 10;
     position: relative;
 }
-footer{
-    position: fixed;
-    bottom: 0.25rem;
-    z-index: 200;
-}
-#maplist .button{
-    background:#fff;
-    position: relative;
-    width: 1.1rem;
-    height: 0.33rem;
-    text-align: center;
-    line-height: 0.33rem;
-    color: #5F5F5F;
-    border-radius: 0.165rem;
-    padding-left: 0.23rem;
-    box-sizing: border-box;
-    margin:0 0 0.15rem 1.33rem;
-    img{
-        height: 0.11rem;
-        width: 0.13rem;
-        position: absolute;
-        top:0.11rem;
-        left:0.14rem;
-    }
-}
-
 </style>
 <style lang="scss">
 .amap-icon{

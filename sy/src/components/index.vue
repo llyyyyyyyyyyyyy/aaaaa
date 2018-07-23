@@ -1,8 +1,8 @@
 <template>
   <div id="maplist">
-      <!-- <header @click="hclick()"></header> -->
+      <!-- <header @click="hclick()" ref="he" style="height:20px"></header> -->
     <img class="logo" src="../assets/img/logo@3x.png" alt="">
-    <div id="container" class="mymap"></div>
+    <div id="container"></div>
     <footer>
         <transition leave-active-class="animated  fadeOutDown" enter-active-class="animated fadeInUp">
         <div class="button" @click="toList" v-show="swShow" >
@@ -23,6 +23,7 @@
                         <img class="shadow" src="../assets/img/Rectangle@3x.png" alt="" >
                         <h4>{{n.name}}</h4>
                     </div>
+                    <div class="swiper-slide last"></div>
                 </div>
             </div>
             </transition>
@@ -52,6 +53,12 @@ export default {
         setTimeout(()=>{that.BMap.setZoom(10)},1000)
     },
     methods: {
+        hclick(){
+            console.log(document.body.scrollWidth)
+            console.log(document.getElementById('container').style.height)
+            this.$refs.he.innerHTML =  document.body.clientWidth
+            document.body.clientWidth 
+        },
         toInfo(id){
             this.$router.push({path:'/poiinfo/'+id})
             
@@ -59,11 +66,12 @@ export default {
         initSwiper(){
             let that = this
             this.mySwiper = new Swiper('.swiper-container', {
-            resistanceRatio:0.5,
+            resistanceRatio:1,
             spaceBetween : 12,
             observer:true,
-            slidesPerView: 1,
             observeParents:true,
+            slidesPerView :'auto',
+            // loop:true,
             onSlideChangeEnd() {
                 that.BMap.setZoom(13)
                 that.BMap.setCenter(that.center[that.mySwiper.activeIndex])
@@ -71,7 +79,7 @@ export default {
                 that.infoWindow.setContent(that.BMap.getAllOverlays('marker')[that.mySwiper.activeIndex].content)
                 }
             })
-            
+        
         },
         //获取数据
         getData(){
@@ -87,6 +95,7 @@ export default {
                 }})
                 this.area = this.BMap.getBounds()
                 this.BMap.setLimitBounds(this.area)
+                console.log(res.data.data)
             })
         },
         //跳转列表页
@@ -128,7 +137,7 @@ export default {
                     strokeOpacity: 1, //线透明度
                     strokeWeight: 1, //线宽
                     fillColor: "#ddd", //填充色
-                    fillOpacity: 0.5, //填充透明度
+                    fillOpacity: 0.6, //填充透明度
                 };
             });
         }
@@ -215,7 +224,7 @@ export default {
                         strokeOpacity: 1, //线透明度
                         strokeWeight: 1, //线宽
                         fillColor: '#ddd', //填充色
-                        fillOpacity: 0.5, //填充透明度
+                        fillOpacity: 0.6, //填充透明度
                         map: that.BMap,
                         path: path
                     });
@@ -229,9 +238,6 @@ export default {
 
 
 <style lang="scss" scoped>
-header{
-    height: 0.44rem;
-}
 .logo{
     position: fixed;
     top: 0.12rem;
@@ -246,6 +252,9 @@ header{
         .swiper-wrapper{
             margin-left:0.24rem;
             width: 3.27rem;
+        }
+        .last{
+            width: 0.48rem;
         }
         .swiper-slide{
             color: #fff;
@@ -269,7 +278,7 @@ header{
         }    
     }
 #maplist{
-    height: 6.67rem;
+    height: 100%;
     width: 100%;
     z-index: 10;
     position: relative;

@@ -1,5 +1,5 @@
 <template>
-    <div class="poiinfo">
+    <div>
         <div id="info">
             <div class="img-box">
                 <img :src="InfoData.top_img+'-Newdeer11.1080'" alt="">
@@ -16,9 +16,9 @@
                 <p><span>印象：</span>{{InfoData.description150}}</p>
             </div>
             <div class="intrp pSty" ref="intrp">
-                <p ><span>简介:</span>{{InfoData.guideIntro}}...</p>
-                <div class="unfold" ref="unfold" @click="moreIntry">查看更多</div>
+                <p  ref="intrpInfo"><span>简介：</span>{{InfoData.guideIntro}}</p>
             </div>
+            <div class="unfold" ref="unfold" @click="moreIntry" >查看更多</div>
             <div class="title">
                 <div class="k"></div>
                 <h3>实用信息</h3>
@@ -31,7 +31,7 @@
                 <h4 v-if="InfoData.guideAddress">
                     <img src="../assets/img/地址 (1)@3x.png" alt="">
                     <span>地址</span>
-                    <i>{{InfoData.guideAddress}}<a @click='init(InfoData)'>导航</a></i>
+                    <i>{{InfoData.guideAddress}}<a class="a" @click='init(InfoData)'>导航</a></i>
                     
                 </h4>
                 <h4 v-if="InfoData.guideTicket">
@@ -57,7 +57,7 @@
                 <h4 class="B" v-if="InfoData.guideWebsite">
                     <img src="../assets/img/网址@3x.png" alt="">
                     <span>网站</span>
-                    <i>{{InfoData.guideWebsite}}</i>
+                    <a href="InfoData.guideWebsite" class="b"><i>{{InfoData.guideWebsite}}</i></a>
                 </h4>
                 <h4 class="B" v-if="InfoData.guidePhone">
                     <img src="../assets/img/电话@3x.png" alt="">
@@ -79,15 +79,20 @@
                     <span>{{item.nickName}}</span>
                     <i>{{item.createTime}}</i>
                 </h5>
-                <p class=".cont">
+                <p class="cont">
                     {{item.commentDesp}}
                 </p>
                 <div class="imgBox">
-                    <img class="pic" alt="" v-if="item.imgList" v-for="img in item.imgList" :key="img.id" :src="img.imgUrl">
+                    <img class="pic" alt="" v-if="item.imgList" v-for="img in item.imgList" :key="img.id" :src="img.imgUrl+'-Newdeer11'">
                 </div>
             </div>
-            <h6 v-if="comment.length == 0">还没有评论,快来抢沙发吧！</h6>
-            <p class="more" @click="commentNum += 10" v-if="commentNum < comment.length">查看全部精彩评论   ></p>
+            <router-link :to="{ name: 'comment', params:{ name: `${InfoData.name}`, id:InfoData.id } }">
+                <h6 v-if="comment.length == 0">
+                    还没有评论,快来抢沙发吧
+                    <img src="../assets/img/PathCopy 4@3x.png" alt="">
+                </h6>
+            </router-link>
+            <p class="more" @click="commentNum += 5" v-if="commentNum < comment.length">查看更多精彩评论   ></p>
             <div class="title">
                 <div class="k"></div>
                 <h3>附近景点</h3>
@@ -113,14 +118,15 @@ export default {
             InfoData:[],
             //评论列表
             comment:[],
-            commentNum: 10,
+            commentNum: 3,
             origin:'',
             nearData:[]
         }
     },
     props:['id'],
     created(){
-        // Indicator.open()
+        console.log(this.$refs.intrpInfo)
+    //    document.documentElement.scrollTop = '0'
     },
     methods: {
          mapClick(){
@@ -147,7 +153,7 @@ export default {
                 geolocation.getCurrentPosition();
                 AMap.event.addListener(geolocation, 'complete', function(data,a,b){
                     _this.origin = [data.position.lng,data.position.lat]
-                    console.log(_this.origin)
+                   
 
                     _this.navigat(obj)
                 });//返回定位信息
@@ -186,13 +192,11 @@ export default {
             resistanceRatio:0.5,
             spaceBetween : 8,
             observer:true,
-            slidesPerView :'auto',
-            // loop : true, 
-            // slidesPerview:'auto'
+            slidesPerView :'auto'
             })
             setTimeout(()=>{
                 document.getElementsByClassName('swiper-wrapper')[0].style.transform="translate3d(0px,0px,0px)"
-            },50)
+            },100)
         },
         loadmap(mapData){
             let map = new AMap.Map('container', {
@@ -231,7 +235,7 @@ export default {
         getComment(){
             this.$http.get('http://dev.shunyi.mydeertrip.com:84/comment/list?itemId='+this.$route.params.id+'&isCream=2&qType=all&start=0&limit=1000&token='+tool.token()).then(res=>{
                     this.comment = res.data.data.list;
-                    console.log(res.data.data.list)
+                   
             })
         },
         //获取附近景点
@@ -239,7 +243,6 @@ export default {
             this.$http.get('http://dev.shunyi.mydeertrip.com:83/scenic_spots/listNearbyss',{
                 params:{lat:this.InfoData.longitude,lon:this.InfoData.latitude,ssId:536}
             }).then(res=>{
-                console.log(res.data.data.list)
                 this.nearData = res.data.data.list
             })
         },
@@ -266,6 +269,16 @@ h6{
     font-size: 0.14rem;
     font-weight: 900;
     margin-top:0.2rem;
+    color: #848484;
+    display: flex;
+    height: 0.24rem;
+    justify-content:center;
+    line-height: 0.24rem;
+    img{
+        height: 0.1rem;
+        width: 0.06rem;
+        margin: 0.06rem 0 0 0.06rem
+    }
 }
 #info{
     width: 3.27rem;
@@ -292,14 +305,14 @@ h6{
     font-size: 0.12rem;
     color: #3F3F3F;
     line-height: 0.17rem;
-    margin: 0.04rem 0 0.06rem;
+    margin-top:0.04rem;
 }
 main{
     width: 3.33rem;
     margin: 0 auto;
 }
 main .title{
-    margin-top: .5rem;
+    margin-top: .3rem;
     line-height: 0.24rem;
     margin-bottom: 0.12rem;
     position: relative;
@@ -335,14 +348,14 @@ main .pSty p span{
     color: #119DFF
 }
 main .intrp{
-    margin: 0.16rem 0 0.4rem; 
+    margin: 0.16rem 0 0 0;  
     width: 3.33rem;
     height: 0.46rem;
     position: relative;
     overflow: hidden;
 }
-main .intrp .unfold{
-    position: absolute;
+main .unfold{
+    float: right;
     bottom:0rem;
     left: 2.75rem;
     color: #119DFF;
@@ -356,17 +369,16 @@ main .intrp .unfold{
 .practical  h4{
     margin-top:0.3rem;
     line-height: 0.21rem;
+    font-size: 0.14rem
 }
 .practical  h4 img{
     padding-top: 0.04rem;
-    /* display: inline-block; */
     vertical-align:middle;
     width: 0.14rem;
     height: 0.14rem;
     float: left;
 }
 .practical  h4 span{
-    /* display: inline-block; */
     float: left;
     top:0;
     margin:0 0.12rem;
@@ -376,7 +388,7 @@ main .intrp .unfold{
     max-width: 2.62rem;
     min-height: 0.21rem;
 }
-.practical  h4 a{
+.practical  h4 .a{
     height: 0.16rem;
     color: #119DFF;
     position: absolute;
@@ -425,9 +437,8 @@ main .intrp .unfold{
     line-height: 0.17rem;
 }
 .comment .cont{
-    width: 2.79rem;
-    height: 0.84rem;
     margin-top:0.08rem;
+    word-wrap:break-word;
 }
 .more{
     color: #119DFF;

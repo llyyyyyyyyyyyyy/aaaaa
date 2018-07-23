@@ -35,7 +35,7 @@ export default new Router({
       props:true
     },
     {
-      path: '/comment/:name/:id',
+      path: '/comment/:name/',
       name: 'comment',
       component: comment,
       props:true
