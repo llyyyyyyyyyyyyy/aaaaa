@@ -77,10 +77,11 @@
                 <router-link :to="{ name: 'comment', params:{ name: `${InfoData.name}`, id:InfoData.id } }">写评论</router-link>
             </div>
             <div class="comment" v-for="(item,index) in comment" :key="item.id" v-if="index < commentNum">
+
                 <h5>
                     <img :src="item.photo" alt="">
                     <span>{{item.nickName}}</span>
-                    <i>{{item.createTime}}</i>
+                    <i>{{item.createTime}}<span v-if='item.isCream == 1'>精品</span></i>
                 </h5>
                 <p class=".cont">
                     {{item.commentDesp}}
@@ -407,6 +408,17 @@ main .intrp .unfold{
     display: inline-block;
     font-size: 0.12rem;
     line-height: 0.17rem;
+    display: flex;
+}
+.comment h5 i span{
+    font-size: .11rem;
+    color: #3FA9FF;
+    width: .32rem;
+    height: .14rem;
+    text-align: center;
+    line-height: .14rem;
+    margin-left: .06rem;
+    border: 1px solid #3FA9FF;
 }
 .comment .cont{
     width: 2.79rem;
