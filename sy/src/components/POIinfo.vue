@@ -190,7 +190,9 @@ export default {
             // loop : true, 
             // slidesPerview:'auto'
             })
-            setTimeout(()=>{},50)
+            setTimeout(()=>{
+                document.getElementsByClassName('swiper-wrapper')[0].style.transform="translate3d(0px,0px,0px)"
+            },50)
         },
         loadmap(mapData){
             let map = new AMap.Map('container', {
@@ -274,6 +276,7 @@ h6{
         height: 3.27rem;
         width: 3.27rem;
         overflow: hidden;
+        margin-bottom: 0.15rem;
             img{
                 width: 3.27rem;
                 height: 3.27rem;
