@@ -10,8 +10,6 @@ import 'swiper/dist/css/swiper.min.css'
 import 'animate.css'
 import Mint from 'mint-ui'
 import 'mint-ui/lib/style.css'
-import Scrollspy from 'vue2-scrollspy';
-Vue.use(Scrollspy);
 
 Vue.use(Mint)
 
@@ -24,7 +22,7 @@ Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
 window.host = 'http://shunyi.sinacolour.com/wxcallback';
-window.debug = true;
+window.debug = false;
 window.tool = {}
 window.tool.token = function() {
 	let token = localStorage.getItem('token')

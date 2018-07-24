@@ -78,7 +78,7 @@
                 <h5>
                     <img :src="item.photo" alt="">
                     <span>{{item.nickName}}</span>
-                    <i>{{item.createTime}}<span v-if='item.isCream == 1'>精品</span></i>
+                    <i>{{item.createTime}}<span v-if='item.isCream == 1'>精选</span></i>
                 </h5>
                 <p class="cont">
                     {{item.commentDesp}}
@@ -455,8 +455,9 @@ main .unfold{
     color: #3FA9FF;
     width: .32rem;
     height: .14rem;
-    text-align: center;
-    line-height: .14rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-left: .06rem;
     border: 1px solid #3FA9FF;
 }
