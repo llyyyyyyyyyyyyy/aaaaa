@@ -183,7 +183,9 @@ export default {
                 }) 
             });
             marker.content = `<div class="mMarker" style="background:${mapData[i].icon=='human'?'#EAC454':'#56B7F0' }">
-                                    <img src=${mapData[i].icon=='human'?require('../assets/img/人文@3x.png'):require('../assets/img/自然@3x.png')}>
+                                    <div class="picBox">
+                                        <img src=${mapData[i].icon=='human'?require('../assets/img/人文@3x.png'):require('../assets/img/自然@3x.png')}>
+                                    </div>
                                     <i>${mapData[i].name}</i>
                                 </div>`;
             marker.on('click', function (e) {
@@ -342,17 +344,18 @@ footer{
     display: flex;
     overflow: hidden;
     align-items:center;
-        img{
-            height: 0.35rem;
+        .picBox{
             width: 0.35rem;
-            display: inline;
-            float: left;
+            height: 0.35rem;
+            img{
+                height: 100%;
+            }
         }
+        
         i{
             display:flex;
             font-size:0.1rem;
             color:#fff;
-            float: right;
         } 
 }
 

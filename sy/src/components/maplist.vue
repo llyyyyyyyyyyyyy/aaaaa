@@ -3,6 +3,9 @@
       <!-- <header @click="hclick()"></header> -->
     <img class="logo" src="../assets/img/logo@3x.png" alt="">
     <div id="container" class="mymap"></div>
+    <div class="but" @click='init(InfoData)'>
+        <img src="../assets/img/Shape2@3x.png" alt="">导航
+    </div>
   </div>
   
 </template>
@@ -15,13 +18,68 @@ export default {
             center:[],
             area:[],
             zoom:[],
-            num:[]
+            InfoWindow:[],
+            InfoData:[]
     }},
     props:['id'],
     beforeMount(){
         this.getData()
     },
     methods: {
+        init (obj){
+            var _this = this
+            let mapObj = new AMap.Map('iCenter');
+            mapObj.plugin('AMap.Geolocation', function () {
+                var geolocation = new AMap.Geolocation({
+                    enableHighAccuracy: true,//是否使用高精度定位，默认:true
+                    timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+                    maximumAge: 0,           //定位结果缓存0毫秒，默认：0
+                    convert: true,           //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
+                    showButton: true,        //显示定位按钮，默认：true
+                    buttonPosition: 'LB',    //定位按钮停靠位置，默认：'LB'，左下角
+                    buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+                    showMarker: true,        //定位成功后在定位到的位置显示点标记，默认：true
+                    showCircle: true,        //定位成功后用圆圈表示定位精度范围，默认：true
+                    panToLocation: true,     //定位成功后将定位到的位置作为地图中心点，默认：true
+                    zoomToAccuracy:true      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+                });
+                mapObj.addControl(geolocation);
+                geolocation.getCurrentPosition();
+                AMap.event.addListener(geolocation, 'complete', function(data,a,b){
+                    _this.origin = [data.position.lng,data.position.lat]
+                   
+
+                    _this.navigat(obj)
+                });//返回定位信息
+                AMap.event.addListener(geolocation, 'error', function(error){
+                    console.log(error)
+                    // alert(error)
+                });      //返回定位出错信息
+
+            });
+        },
+        navigat(data){
+            var _this = this;
+            var destination = [data.longitude.toFixed(6),data.latitude.toFixed(6)]
+            console.log(destination)
+            let map_a = new AMap.Map("mapContainer");
+            AMap.plugin(["AMap.Driving"], function() {
+                var drivingOption = {
+                    policy:AMap.DrivingPolicy.LEAST_TIME,
+                    map:map_a
+                };
+                var driving = new AMap.Driving(drivingOption); //构造驾车导航类
+                //根据起终点坐标规划驾车路线
+                // driving.search([{keyword:'北京站'},{keyword:'北京大学'}],function(status,result){
+                driving.searchOnAMAP({
+                    origin:_this.origin,
+                    destination:destination
+                });
+                // });
+                
+            });
+            map_a.addControl(new AMap.ToolBar());
+        },
         //获取数据
         getData(){
             this.$http.get('http://dev.shunyi.mydeertrip.com:83/plan/sslist',{
@@ -30,7 +88,7 @@ export default {
                 this.loadmap(res.data.data.regionDetail[0].ssList)
                 this.area = this.BMap.getBounds()
                 this.BMap.setLimitBounds(this.area)
-                
+                this.InfoData= res.data.data.regionDetail[0].ssList
             })
         },
         //地图实例化
@@ -96,21 +154,38 @@ export default {
                 return rings[0];
             }
 
-            console.log(mapData)
             //加载对应信息窗体
+            that.infoWindow = new AMap.InfoWindow({
+                offset: new AMap.Pixel(-10, 10),
+                closeWhenClickMap:true,
+                isCustom:true
+            });
+
             for ( let i = 0; i < mapData.length;i++){
                 if(mapData[i].id == that.id){
-                    that.num = i
+                    that.InfoData = mapData[i]
+                    console.log( that.InfoData)
                     that.center.push([mapData[i].longitude,mapData[i].latitude])
-                let marker = new AMap.Marker({
-                    position: [mapData[i].longitude,mapData[i].latitude],
-                    offset: new AMap.Pixel(-5,-5),
-                    map: that.BMap,
-                    content : `<div class="mMarker" style="background:${mapData[i].icon=='human'?'#EAC454':'#56B7F0' }">
-                                    <img src=${mapData[i].icon=='human'?require('../assets/img/人文@3x.png'):require('../assets/img/自然@3x.png')}>
-                                    <i>${mapData[i].name}</i>
-                                </div>`
-                });
+                    let marker = new AMap.Marker({
+                        position: [mapData[i].longitude,mapData[i].latitude],
+                        offset: new AMap.Pixel(-5,-5),
+                        map: that.BMap,
+                        icon:new AMap.Icon({            
+                            image:mapData[i].icon=='human'? require('../assets/img/Oval 7@3x.png') : require('../assets/img/Oval 3@3x.png'),
+                            imageSize: new AMap.Size(10,10),
+                        })
+                    });
+                    marker.content = `<div class="mapMarker" style="background:${mapData[i].icon=='human'?'#EAC454':'#56B7F0' }">
+                                        <img src=${mapData[i].icon=='human'?require('../assets/img/人文@3x.png'):require('../assets/img/自然@3x.png')}>
+                                        <i>${mapData[i].name}</i>
+                                        </div>`;
+                    marker.on('click', function (e) {
+                        that.infoWindow.setContent(e.target.content);
+                        that.BMap.setCenter([mapData[i].longitude,mapData[i].latitude])
+                        that.infoWindow.open(that.BMap, e.target.getPosition());
+                        
+                    })
+                    marker.emit('click', {target: marker});
                 }
             }
             
@@ -154,9 +229,6 @@ export default {
 
 
 <style lang="scss" scoped>
-header{
-    height: 0.44rem;
-}
 .mymap{
     height: 100%;
 }
@@ -174,6 +246,26 @@ header{
     width: 100%;
     z-index: 10;
     position: relative;
+    .but{
+        z-index: 300;
+        position: absolute;
+        bottom: 0.4rem;
+        left:1.47rem;
+        background: #fff;
+        height: 0.33rem;
+        width: 0.82rem;
+        border-radius: 16.5rem;
+        line-height: 0.33rem;
+        font-size: 0.13rem;
+        letter-spacing:0.03rem;
+        display: flex;
+        justify-content:center;
+        align-items:center;
+        img{
+            height: 0.14rem;
+            margin-right: 0.1rem
+        }
+    }
 }
 </style>
 <style lang="scss">
@@ -184,8 +276,7 @@ header{
         position: relative;
     }
 }
-.mMarker{
-    background:#EAC454;
+.mapMarker{
     padding:0 0.12rem 0 0;
     border:1px solid #fff;
     border-radius: 0.18rem;
@@ -195,16 +286,14 @@ header{
     overflow: hidden;
     align-items:center;
         img{
-            height: 0.34rem;
-            width: 0.34rem;
+            height: 0.37rem;
             display: inline;
+            float: left;
         }
         i{
             display:flex;
             font-size:0.1rem;
             color:#fff;
-            float: right;
-            display: block;
         } 
 }
 

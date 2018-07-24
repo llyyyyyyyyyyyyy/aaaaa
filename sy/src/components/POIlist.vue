@@ -4,7 +4,7 @@
             <img :src="n.top_img+'-Newdeer21'" alt="">
             <h2>{{n.name}}</h2>
             <h3>
-                <i v-for="(i,a) in n.natureList" :key="i.id" v-if="a<3">{{i.value}} </i>
+                <i v-for="(i,a) in n.natureList" :key="i.id" v-if="a<3"><span v-if="a > 0"> · </span>{{i.value}}</i>
             </h3>
             <div class="impression">
                 <p><span>活动亮点：</span>{{n.description150}}</p>

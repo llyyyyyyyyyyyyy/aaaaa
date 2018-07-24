@@ -5,20 +5,20 @@
                 <img :src="InfoData.top_img+'-Newdeer11.1080'" alt="">
             </div>
             <h2>{{InfoData.name}}</h2>
-            <h3><i v-for="n in InfoData.natureList" :key="n.id" >{{n.value}} </i></h3>
+            <h3><i v-for="(n,a) in InfoData.natureList" :key="n.id" ><span v-if="a>0"> · </span>{{n.value}}</i></h3>
         </div>
         <main>
             <div class="title">
                 <div class="k"></div>
-                <h3 @click="aaaclick()">活动介绍</h3>
+                <h3>活动介绍</h3>
             </div>
             <div class="pSty"  >
-                <p><span>印象：</span>{{InfoData.description150}}</p>
+                <p><span>活动亮点：</span>{{InfoData.description150}}</p>
             </div>
-            <div class="intrp pSty" ref="intrp">
-                <p  ref="intrpInfo"><span>简介：</span>{{InfoData.guideIntro}}</p>
+            <div class="pSty intrp">
+                <p  :class="this.more ? 'moreP' : ''"><span>活动详情：</span>{{InfoData.guideIntro}}</p>
             </div>
-            <div class="unfold" ref="unfold" @click="moreIntry" >查看更多</div>
+            <div class="unfold" ref="unfold" @click="moreIntry" ><i v-if="this.more">查看更多</i><i v-if="!this.more">收起详情</i></div>
             <div class="title">
                 <div class="k"></div>
                 <h3>实用信息</h3>
@@ -26,43 +26,44 @@
             <div class="map">
                 <div id="container"></div>
                 <div class="shadow" @click="mapClick()"></div>
+                <a class="a" @click='init(InfoData)'>导航</a>
             </div>
             <div class="practical">
                 <h4 v-if="InfoData.guideAddress">
-                    <img src="../assets/img/地址 (1)@3x.png" alt="">
+                    <img src="../assets/img/地址 (1)@3x.png" alt="" style="height:0.15rem;width:0.13rem">
                     <span>地址</span>
-                    <i>{{InfoData.guideAddress}}<a class="a" @click='init(InfoData)'>导航</a></i>
+                    <i>{{InfoData.guideAddress}}</i>
                     
                 </h4>
                 <h4 v-if="InfoData.guideTicket">
-                    <img src="../assets/img/icon copy1@3x.png" alt="" >
+                    <img src="../assets/img/icon copy1@3x.png" alt="" style="height:0.15rem;width:0.16rem">
                     <span>门票</span>
                     <i>{{InfoData.guideTicket}}</i>
                 </h4>
                 <h4 v-if="InfoData.guideOpenTime">
-                    <img src="../assets/img/icon copy@3x.png" alt="">
+                    <img src="../assets/img/icon copy@3x.png" alt="" style="height:0.15rem;width:0.14rem">
                     <span>时间</span>
                     <i>{{InfoData.guideOpenTime}}</i>
                 </h4>
                 <h4 v-if="InfoData.guideTraffic">
-                    <img src="../assets/img/交通 copy@3x.png" alt="">
+                    <img src="../assets/img/交通 copy@3x.png" alt="" style="height:0.15rem;width:0.13rem">
                     <span>交通</span>
                     <i>{{InfoData.guideTraffic}}</i>
                 </h4>
                 <h4 v-if="InfoData.guideTips">
-                    <img src="../assets/img/灯泡@3x.png" alt="">
+                    <img src="../assets/img/灯泡@3x.png" alt="" style="height:0.15rem;width:0.13rem">
                     <span>贴士</span>
                     <i>{{InfoData.guideTips}}</i>
                 </h4>
                 <h4 class="B" v-if="InfoData.guideWebsite">
-                    <img src="../assets/img/网址@3x.png" alt="">
+                    <img src="../assets/img/网址@3x.png" alt="" style="height:0.15rem;width:0.14rem">
                     <span>网站</span>
-                    <a href="InfoData.guideWebsite" class="b"><i>{{InfoData.guideWebsite}}</i></a>
+                    <a :href="InfoData.guideWebsite"><i>{{InfoData.guideWebsite}}</i></a>
                 </h4>
                 <h4 class="B" v-if="InfoData.guidePhone">
-                    <img src="../assets/img/电话@3x.png" alt="">
+                    <img src="../assets/img/电话@3x.png" alt="" style="height:0.14rem;width:0.14rem"> 
                     <span>电话</span>
-                    <a href="tel:InfoData.guidePhone"><i>{{InfoData.guidePhone}}</i></a>
+                    <a :href='"tel:"+InfoData.guidePhone'><i>{{InfoData.guidePhone}}</i></a>
                 </h4>
             </div>
             <div class="title">
@@ -74,7 +75,7 @@
                 </router-link>
             </div>
             <div class="comment" v-for="(item,index) in comment" :key="item.id" v-if="index < commentNum">
-
+                
                 <h5>
                     <img :src="item.photo" alt="">
                     <span>{{item.nickName}}</span>
@@ -84,9 +85,12 @@
                     {{item.commentDesp}}
                 </p>
                 <div class="imgBox">
-                    <img class="pic" alt="" v-if="item.imgList" v-for="img in item.imgList" :key="img.id" :src="img.imgUrl+'-planspot.ios'">
+                    <img class="pic" alt="" v-if="item.imgList" v-for="img in item.imgList" :key="img.id" :src="img.imgUrl+'-planspot.ios'" @click="picClick(img.imgUrl)">
+                    
                 </div>
+                
             </div>
+            <big-img v-if="showImg" @clickit="showImg=false" :imgSrc="imgSrc"></big-img>
             <router-link :to="{ name: 'comment', params:{ name: `${InfoData.name}`, id:InfoData.id } }">
                 <h6 v-if="comment.length == 0">
                     还没有评论,快来抢沙发吧
@@ -103,7 +107,7 @@
                     <div class="swiper-slide" v-for="n in nearData" :key="n.id" @click="nearClick(n.id)">
                         <img :src='n.img+"-Newdeer11.500"'>
                         <p>{{n.name}}</p>
-                        <span>距离{{(n.distance/1000000).toFixed(1)}}km</span>
+                        <span>距离{{n.distanceStr}}km</span>
                     </div>
                 </div>
             </div>
@@ -112,6 +116,7 @@
 </template>
 <script>
 import { Indicator } from 'mint-ui'
+import bigPic from './bigPic'
 import AMap from 'AMap'
 export default {
     data(){
@@ -121,27 +126,30 @@ export default {
             comment:[],
             commentNum: 3,
             origin:'',
-            nearData:[]
+            nearData:[],
+            imgSrc:[],
+            showImg:false,
+            more:true
         }
     },
     props:['id'],
-    created(){
-    //   console.log(document.getElementsByClassName('img-box'))
-    //   document.getElementsByClassName('img-box').scrollTop = 0
+    components: {
+        'big-img':bigPic
     },
-    watch: {
-          // 如果路由有变化，会再次执行该方法
-          "$route": "getInfo"
-    },
+     watch:{
+      '$route':'getInfo'
+  },
     methods: {
-        aaaclick(){
-            alert(document.documentElement.scrollTop)
+        picClick(Psrc){
+            this.showImg = true
+            this.imgSrc = Psrc;
+            console.log(this.imgSrc)
         },
         mapClick(){
              this.$router.push({path:'/maplist/'+this.id})
          },
         nearClick(nearid){
-            // console.log('go')
+            console.log(nearid)
             this.$router.push({path:'/poiinfo/'+nearid})
         },
         init (obj){
@@ -225,7 +233,7 @@ export default {
             let marker = new AMap.Marker({
                 position: [mapData.longitude,mapData.latitude], 
                 icon: icon,
-                offset: new AMap.Pixel(-10, -10)
+                offset: new AMap.Pixel(-15, -15)
             });
             map.add(marker);
             map.setMapStyle('amap://styles/'+'whitesmoke');
@@ -240,6 +248,7 @@ export default {
                     this.initSwiper()
                     this.getComment()
                     this.getNear()
+                    console.log(res.data.data.ss)
                 })
                 // Indicator.close()
         },
@@ -253,25 +262,19 @@ export default {
         //获取附近景点
         getNear(){
             this.$http.get('http://dev.shunyi.mydeertrip.com:83/scenic_spots/listNearbyss',{
-                params:{lat:this.InfoData.longitude,lon:this.InfoData.latitude,ssId:536}
+                params:{lat:this.InfoData.latitude,lon:this.InfoData.longitude,ssId:this.id}
             }).then(res=>{
                 this.nearData = res.data.data.list
             })
         },
          //展开内容
         moreIntry () {
-            if(this.$refs.unfold.innerHTML =='查看更多'){
-                this.$refs.intrp.style.height = 'auto'
-                this.$refs.unfold.innerHTML ='收起内容'}
-            else{
-                this.$refs.intrp.style.height = '0.46rem'
-                this.$refs.unfold.innerHTML ='查看更多'
-            }
+            this.more = !this.more
+
         },
     },
     mounted(){
     this.getInfo()
-    setTimeout(()=>{console.log(document.getElementsByClassName('intrpInfo'))},1000) 
     },
     
 }
@@ -306,6 +309,7 @@ h6{
             img{
                 width: 3.27rem;
                 height: 3.27rem;
+                border-radius: 4px
             }   
     }
 #info h2{
@@ -363,9 +367,16 @@ main .pSty p span{
 main .intrp{
     margin: 0.16rem 0 0 0;  
     width: 3.33rem;
-    height: 0.46rem;
+    height: auto;
     position: relative;
     overflow: hidden;
+    .moreP{
+        height: 0.46rem;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+    }
 }
 main .unfold{
     float: right;
@@ -387,8 +398,6 @@ main .unfold{
 .practical  h4 img{
     padding-top: 0.04rem;
     vertical-align:middle;
-    width: 0.14rem;
-    height: 0.14rem;
     float: left;
 }
 .practical  h4 span{
@@ -401,15 +410,19 @@ main .unfold{
     max-width: 2.62rem;
     min-height: 0.21rem;
 }
-.practical  h4 .a{
-    height: 0.16rem;
+.map  .a{
+    height: 0.2rem;
+    width: 0.45rem;
     color: #119DFF;
     position: absolute;
-    right: .3rem;
+    bottom: 0.05rem;
+    right: 0.06rem;
     border: 1px solid #119DFF;
     border-radius: 2px;
-    padding: 0 0.08rem;
-    line-height: 0.16rem;
+    line-height: 0.2rem;
+    z-index: 400;
+    text-align: center;
+    letter-spacing:0.03rem;
 }
 .practical .B i{
     color: #119DFF
@@ -429,13 +442,13 @@ main .unfold{
     width: .8rem;
     height: .8rem;
     margin: .05rem;
+    border-radius: 4px
 }
 .comment h5 img{
     margin-left: -0.48rem;
     height: 0.4rem;
     width: 0.4rem;
     border-radius: 0.2rem;
-    /* display: inline-block; */
     float: left;
     margin-right: 0.08rem;
 }
@@ -480,6 +493,7 @@ main .unfold{
     img{
         width: 1.20rem;
         height: 1.20rem;
+        border-radius: 4px
     }
     .name{
         font-weight: 900;
@@ -492,6 +506,8 @@ main .unfold{
     height: 1.09rem;
     width: 3.27rem;
     position: relative;
+    border-radius: 4px;
+    overflow: hidden;
     .shadow{
         height: 1.09rem;
         width: 3.27rem;

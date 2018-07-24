@@ -15,4 +15,10 @@ export default {
 #app{
   height: 100%;
 }
+.amap-logo{
+  display: none;
+}
+.amap-copyright{
+  display: none !important;
+}
 </style>
