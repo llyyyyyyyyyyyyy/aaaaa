@@ -101,6 +101,7 @@
   .loading(v-if="isPreloadingC",:class="{'first-loading':isFirstTIme}")
     div.double-bounce1
     div.double-bounce2
+  div.content(v-if="!isPreloadingC") 暂无图片
 
 </template>
 
@@ -184,6 +185,7 @@ export default {
     },
 
     loadFn(e, oImg, i) { // 每张图片预加载完成执行函数
+      console.log(123)
       this.loadedCount++
       if (e.type === 'load') { // 使用图片原始宽度计算图片的高度
         this.$set(this.imgsArr[i], 'height', Math.round(this.imgWidthC / (oImg.width / oImg.height)))
@@ -242,6 +244,10 @@ export default {
     },
   },
   mounted() {
+    console.log()
+    if (this.imgsArr.length == 0) {
+      this.isPreloadingC = false;
+    }
     // ==1== 根据窗口大小初始化列数
     this.initColumnCount()
     this.beginIndex = this.columnCount // 开始排列的元素索引

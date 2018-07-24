@@ -1,7 +1,7 @@
 <template>
     <div>
         <div id="info">
-            <div class="img-box">
+            <div class="img-box" @click="toPhoto">
                 <img :src="InfoData.top_img+'-Newdeer11.1080'" alt="">
             </div>
             <h2>{{InfoData.name}}</h2>
@@ -134,6 +134,9 @@ export default {
           "$route": "getInfo"
     },
     methods: {
+        toPhoto(){
+            this.$router.push({path: '/photoPage'})
+        },
         aaaclick(){
             alert(document.documentElement.scrollTop)
         },

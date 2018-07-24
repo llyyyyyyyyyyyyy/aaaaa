@@ -38,9 +38,14 @@
 			<p class="p"></p>
 
 			<div class="imgs">
-				<div class="imgBox" v-for="(img,index) in imgArr"  v-if="imgArr.length>0" :key="index">
-					<img :src="img" alt="">
-					<span @click="delImg(index)">一</span>
+				<div class="imgBox" 
+				v-for="(img,index) in imgArr"  
+				v-if="imgArr.length>0"
+				:style="{ 'backgroundImage': 'url(' + img +')' }"
+				:key="index"
+				@click.stop="imgClick(img)">
+					<!-- <img :src="img" alt=""> -->
+					<span @click.stop="delImg(index)">一</span>
 				</div>
 				<div class="imgUpload" v-if="imgArr.length<9">
 					<img src="./images/WechatIMG2.png" alt="">
@@ -50,6 +55,9 @@
 				</div>
 			</div>
 		</form>
+		<div class="bigImg" v-if='showImg' @click="showImg=false">
+			<img :src="bigImg" alt="">
+		</div>
 	</div>
 </template>
 <script>
@@ -76,10 +84,19 @@ import { Indicator } from 'mint-ui';
 				imgData:[],
 				formData:{},
         		pf:false,
+        		showImg:false,
+        		bigImg:'',
 			}
 		},
 		methods:{
-
+			imgClick(img){
+				this.showImg = true;
+				this.bigImg = img;
+			},
+			delImg:function(index){
+				this.imgArr.splice(index,1);
+				this.imgData.splice(index,1);
+			},
 			back:function(){
 				window.history.back();
 			},
@@ -115,10 +132,6 @@ import { Indicator } from 'mint-ui';
 					Indicator.close();
 					_this.$router.go(-1)
 			    })
-			},
-			delImg:function(index){
-				this.imgArr.splice(index,1);
-				this.imgData.splice(index,1);
 			},
 			imgUpload:function(){
 			    var reader = new FileReader();
