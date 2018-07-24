@@ -45,7 +45,7 @@
 				<div class="imgUpload" v-if="imgArr.length<9">
 					<img src="./images/WechatIMG2.png" alt="">
 					<!-- <input type="file" id="file" name="avatar" @change="imgUpload" ref="imgUp"> -->
-					<input class="file" name="file" id="file" type="file" accept="image/png,image/gif,image/jpeg" @change="imgUpload" ref="imgUp"/>
+					<input class="file" name="file" id="file" type="file" accept="image/*" @change="imgUpload" ref="imgUp"/>
 
 				</div>
 			</div>
@@ -142,9 +142,6 @@ import { Indicator } from 'mint-ui';
 			this.formData = new FormData();
 		},
     	watch:{
-      		'pfNum':function () {
-
-      		}
     	}
 	}
 </script>

@@ -22,10 +22,10 @@ Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
 window.host = 'http://shunyi.sinacolour.com/wxcallback';
-window.debug = false;
+window.debug = true;
 window.tool = {}
 window.tool.token = function() {
-	let token = localStorage.getItem('token')
+	let token = localStorage.getItem('sytoken')
 	if (!token || token === 'undefined') {
 		if (debug) {
 			return 'e288cdc4355f3704f8efaef76347b3df'
