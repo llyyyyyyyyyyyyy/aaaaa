@@ -5,7 +5,7 @@
                 <img :src="InfoData.top_img+'-Newdeer11.1080'" alt="">
             </div>
             <h2>{{InfoData.name}}</h2>
-            <h3><i v-for="(n,a) in InfoData.natureList" :key="n.id" ><span v-if="a>0"> · </span>{{n.value}}</i></h3>
+            <h3><i v-for="(n,a) in InfoData.natureList" :key="n.id" v-if="a<3"><span v-if="a>0"> · </span>{{n.value}}</i></h3>
         </div>
         <main>
             <div class="title">
