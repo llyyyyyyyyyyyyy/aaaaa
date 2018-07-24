@@ -74,16 +74,17 @@
                 </router-link>
             </div>
             <div class="comment" v-for="(item,index) in comment" :key="item.id" v-if="index < commentNum">
+
                 <h5>
                     <img :src="item.photo" alt="">
                     <span>{{item.nickName}}</span>
-                    <i>{{item.createTime}}</i>
+                    <i>{{item.createTime}}<span v-if='item.isCream == 1'>精品</span></i>
                 </h5>
                 <p class="cont">
                     {{item.commentDesp}}
                 </p>
                 <div class="imgBox">
-                    <img class="pic" alt="" v-if="item.imgList" v-for="img in item.imgList" :key="img.id" :src="img.imgUrl+'-Newdeer11'">
+                    <img class="pic" alt="" v-if="item.imgList" v-for="img in item.imgList" :key="img.id" :src="img.imgUrl+'-planspot.ios'">
                 </div>
             </div>
             <router-link :to="{ name: 'comment', params:{ name: `${InfoData.name}`, id:InfoData.id } }">
@@ -447,6 +448,17 @@ main .unfold{
     display: inline-block;
     font-size: 0.12rem;
     line-height: 0.17rem;
+    display: flex;
+}
+.comment h5 i span{
+    font-size: .11rem;
+    color: #3FA9FF;
+    width: .32rem;
+    height: .14rem;
+    text-align: center;
+    line-height: .14rem;
+    margin-left: .06rem;
+    border: 1px solid #3FA9FF;
 }
 .comment .cont{
     margin-top:0.08rem;

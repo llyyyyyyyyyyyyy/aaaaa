@@ -10,7 +10,7 @@ import photoPage from '../components/photoPage/photoPage.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -52,5 +52,15 @@ export default new Router({
       component: photoPage,
       props:true
     }
-  ]
-})
+  ],
+  scrollBehavior(to, from, savedPosition) {
+
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return {x: 0, y: 0}
+    }
+  }
+});
+
+export default router

@@ -8,6 +8,12 @@ import './stylesheets/_reset.scss'
 import './stylesheets/area.scss'
 import 'swiper/dist/css/swiper.min.css'
 import 'animate.css'
+import Mint from 'mint-ui'
+import 'mint-ui/lib/style.css'
+import Scrollspy from 'vue2-scrollspy';
+Vue.use(Scrollspy);
+
+Vue.use(Mint)
 
 
 //axios

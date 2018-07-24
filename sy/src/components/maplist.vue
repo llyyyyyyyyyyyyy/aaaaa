@@ -13,7 +13,6 @@ export default {
         return{
             BMap:[],
             center:[],
-            InfoWindow:[],
             area:[],
             zoom:[],
             num:[]
@@ -21,7 +20,6 @@ export default {
     props:['id'],
     beforeMount(){
         this.getData()
-        setTimeout(()=>{this.infoWindow.open(this.BMap,this.center[this.num])},500) 
     },
     methods: {
         //获取数据
@@ -98,38 +96,20 @@ export default {
                 return rings[0];
             }
 
-        //点击出来的信息窗体 
-            that.infoWindow = new AMap.InfoWindow({
-                offset: new AMap.Pixel(-4, 4),
-                closeWhenClickMap:true,
-                isCustom:true,
-                autoMove:true,
-            });
             console.log(mapData)
             //加载对应信息窗体
             for ( let i = 0; i < mapData.length;i++){
                 if(mapData[i].id == that.id){
                     that.num = i
-                    that.infoWindow.open(that.BMap,that.center[i])
-                    // that.infoWindow.setContent(that.BMap.getAllOverlays('marker')[i].content)
                     that.center.push([mapData[i].longitude,mapData[i].latitude])
                 let marker = new AMap.Marker({
                     position: [mapData[i].longitude,mapData[i].latitude],
                     offset: new AMap.Pixel(-5,-5),
                     map: that.BMap,
-                    icon:new AMap.Icon({            
-                        image:mapData[i].icon=='human'? require('../assets/img/Oval 7@3x.png') : require('../assets/img/Oval 3@3x.png'),                        
-                        imageSize: new AMap.Size(10,10),
-                    }) 
-                });
-                marker.content = `<div class="mMarker">
-                                        <img src=${require('../assets/img/人文@3x.png')}>
-                                        <i>${mapData[i].name}</i>
-                                    </div>`;
-                marker.on('click', function (e) {
-                    that.infoWindow.setContent(e.target.content);
-                    that.BMap.setCenter([mapData[i].longitude,mapData[i].latitude])
-                    that.infoWindow.open(that.BMap, e.target.getPosition());                
+                    content : `<div class="mMarker" style="background:${mapData[i].icon=='human'?'#EAC454':'#56B7F0' }">
+                                    <img src=${mapData[i].icon=='human'?require('../assets/img/人文@3x.png'):require('../assets/img/自然@3x.png')}>
+                                    <i>${mapData[i].name}</i>
+                                </div>`
                 });
                 }
             }
@@ -223,6 +203,8 @@ header{
             display:flex;
             font-size:0.1rem;
             color:#fff;
+            float: right;
+            display: block;
         } 
 }
 

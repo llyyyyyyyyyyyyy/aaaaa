@@ -53,6 +53,7 @@
 	</div>
 </template>
 <script>
+import { Indicator } from 'mint-ui';
 	export default{
 		data(){
 			return{
@@ -83,6 +84,7 @@
 				window.history.back();
 			},
 			submit:function(){
+				var _this = this;
 				if (this.releaseData.comment.length < 15 || this.releaseData.comment.length > 150) {
 					alert('评论至少15个字，至多150个字！');
 					return;
@@ -93,6 +95,7 @@
 		              	return;
 		          	}
         		}
+        		Indicator.open();
 				for(var i = 0; i < this.imgData.length; i++){
 					this.formData.append("file"+i, this.imgData[i]);
 				}
@@ -109,8 +112,8 @@
 					if (res.data.code != '0') {
 						alert('评论失败！')
 					}
-					console.log(res.data)
-            		window.history.back();
+					Indicator.close();
+					_this.$router.go(-1)
 			    })
 			},
 			delImg:function(index){
