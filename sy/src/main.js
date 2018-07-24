@@ -10,8 +10,13 @@ import 'swiper/dist/css/swiper.min.css'
 import 'animate.css'
 import Mint from 'mint-ui'
 import 'mint-ui/lib/style.css'
+import vuex from 'vuex'
+import store from './store/store.js'
+import VueAwesomeSwiper from 'vue-awesome-swiper'
 
 Vue.use(Mint)
+Vue.use(vuex)
+Vue.use(VueAwesomeSwiper)
 
 
 //axios
@@ -62,6 +67,7 @@ router.beforeEach((to, from, next) => {
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

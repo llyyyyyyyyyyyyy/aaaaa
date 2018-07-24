@@ -113,6 +113,7 @@
 <script>
 import { Indicator } from 'mint-ui'
 import AMap from 'AMap'
+import { mapGetters, mapActions } from 'vuex'
 export default {
     data(){
         return{
@@ -123,6 +124,9 @@ export default {
             origin:'',
             nearData:[]
         }
+    },
+    computed: {
+        ...mapGetters(['photo'])
     },
     props:['id'],
     created(){
@@ -235,9 +239,13 @@ export default {
         },
         //获取页面信息
         getInfo(){
+            var _this = this;
             this.$http.get('http://dev.shunyi.mydeertrip.com:83/scenic_spots/guide',{
-                params:{token:tool.token(),id:this.id
-                }}).then(res=>{
+                params:{id:this.id,token:tool.token()}
+            }).then(res=>{
+                    if (res.data.data.ss.imgList) {
+                        _this.$store.dispatch('fetch_photo',res.data.data.ss.imgList);
+                    }
                     this.loadmap(res.data.data.ss)
                     this.InfoData = res.data.data.ss
                     this.initSwiper()

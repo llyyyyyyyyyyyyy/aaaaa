@@ -5,6 +5,7 @@
 </template>
 <script>
 	import photoPage from "./photoWaterfall/vue-waterfall-easy.vue";
+	import { mapGetters, mapActions } from 'vuex'
 	export default{
 		data(){
 			return{
@@ -13,6 +14,9 @@
 				photoArr:[]
 			}
 		},
+		computed: {
+	        ...mapGetters(['photo'])
+	    },
 		components:{photoPage},
 		methods: {
 			back(){
@@ -21,8 +25,10 @@
 		    // 假数据
 		    initImgsArr(n, m) { //num 图片数量
 		      	var arr = []
-		      	for (var i = 0; i < this.photoArr.length; i++) {
-		        	arr.push({ src: this.photoArr[i] })
+		      	if (this.photo) {
+		      		for (var i = 0; i < this.photo.length; i++) {
+			        	arr.push({ src: this.photo[i].img })
+			      	}
 		      	}
 		      	return arr
 		    },

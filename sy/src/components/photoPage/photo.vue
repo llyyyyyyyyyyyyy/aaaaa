@@ -2,7 +2,7 @@
 	<div id="photo" :style="winHeight">
 		<swiper :options="swiperOption" ref="mySwiper" v-if="this.imgArr.length>0">
 		    <swiper-slide style="" v-for="(img,i) in imgArr" :key="i">
-		    	<img :src="img" style="width:100%;" alt="">
+		    	<img :src="img.img" style="width:100%;" alt="">
 		    	<div class="swiper-lazy-preloader" slot="preloader"></div>
 		    </swiper-slide>
 	    	<div class="swiper-pagination"  slot="pagination"></div>
@@ -10,6 +10,8 @@
 	</div>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
 	export default{
 		data(){
 			return{
@@ -20,7 +22,7 @@
 				swiperOption: {
 		          	autoplay: false,
 		          	initialSlide: 0,
-		          	loop: true,
+		          	// loop: true,
 		          	pagination: '.swiper-pagination',
 		          	preloader: 'swiper-lazy-preloader',
 		          	lazyLoading : true,
@@ -29,25 +31,29 @@
 		        }
 			}
 		},
-
+		components: {
+		    swiper,
+		    swiperSlide
+		},
+		computed: {
+	        ...mapGetters(['photo'])
+	    },
 		methods: {
 			backClick() {
 				window.history.back();
 			},
 		},
 	  	mounted() {
-	  		this.swiperOption.initialSlide = this.$publicData.photoNum;
-	  		this.imgArr = this.$publicData.photoArr;
+
+	  		
+	  		this.swiperOption.initialSlide = parseInt(this.$route.params.num);
+	  		this.imgArr = this.photo;
+	  		console.log(this.imgArr.length)
 	  		this.winHeight = 'height:'+window.innerHeight+'px;';
 	  	},
 	}
 </script>
 <style>
-	@import '../../../assets/swiper.min.css';
-	*{
-		margin: 0;
-		padding: 0;
-	}
 	#photo{
 		background-color: black;
 		font-size: 0.16rem;
