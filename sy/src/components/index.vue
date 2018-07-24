@@ -95,7 +95,7 @@ export default {
                 }})
                 this.area = this.BMap.getBounds()
                 this.BMap.setLimitBounds(this.area)
-                console.log(res.data.data)
+                console.log(res.data.data.regionDetail[0].ssList)
             })
         },
         //跳转列表页

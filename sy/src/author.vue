@@ -39,7 +39,7 @@ export default {
               // document.querySelector('#author').innerHTML = JSON.stringify(data);
 
               var result = data.data;
-              localStorage.setItem('token', result.token);
+              localStorage.setItem('sytoken', result.token);
               localStorage.setItem('userId', result.user.userId);
               localStorage.setItem('nickName', result.user.nickName);
               localStorage.setItem('personSign', result.user.personSign);

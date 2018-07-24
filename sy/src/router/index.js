@@ -7,6 +7,7 @@ import maplist from '../components/maplist.vue'
 import author from "../author.vue"
 import comment from '../components/comments/comments.vue'
 import photoPage from '../components/photoPage/photoPage.vue'
+import photo from '../components/photoPage/photo.vue'
 
 Vue.use(Router)
 
@@ -50,6 +51,12 @@ const router = new Router({
       path: '/photoPage',
       name: 'photoPage',
       component: photoPage,
+      props:true
+    },
+    {
+      path: '/photo/:num',
+      name: 'photo',
+      component: photo,
       props:true
     }
     ],

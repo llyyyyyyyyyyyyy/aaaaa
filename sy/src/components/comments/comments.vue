@@ -38,18 +38,26 @@
 			<p class="p"></p>
 
 			<div class="imgs">
-				<div class="imgBox" v-for="(img,index) in imgArr"  v-if="imgArr.length>0" :key="index">
-					<img :src="img" alt="">
-					<span @click="delImg(index)">一</span>
+				<div class="imgBox" 
+				v-for="(img,index) in imgArr"  
+				v-if="imgArr.length>0"
+				:style="{ 'backgroundImage': 'url(' + img +')' }"
+				:key="index"
+				@click.stop="imgClick(img)">
+					<!-- <img :src="img" alt=""> -->
+					<span @click.stop="delImg(index)">一</span>
 				</div>
 				<div class="imgUpload" v-if="imgArr.length<9">
 					<img src="./images/WechatIMG2.png" alt="">
 					<!-- <input type="file" id="file" name="avatar" @change="imgUpload" ref="imgUp"> -->
-					<input class="file" name="file" id="file" type="file" accept="image/png,image/gif,image/jpeg" @change="imgUpload" ref="imgUp"/>
+					<input class="file" name="file" id="file" type="file" accept="image/*" @change="imgUpload" ref="imgUp"/>
 
 				</div>
 			</div>
 		</form>
+		<div class="bigImg" v-if='showImg' @click="showImg=false">
+			<img :src="bigImg" alt="">
+		</div>
 	</div>
 </template>
 <script>
@@ -76,10 +84,19 @@ import { Indicator } from 'mint-ui';
 				imgData:[],
 				formData:{},
         		pf:false,
+        		showImg:false,
+        		bigImg:'',
 			}
 		},
 		methods:{
-
+			imgClick(img){
+				this.showImg = true;
+				this.bigImg = img;
+			},
+			delImg:function(index){
+				this.imgArr.splice(index,1);
+				this.imgData.splice(index,1);
+			},
 			back:function(){
 				window.history.back();
 			},
@@ -116,10 +133,6 @@ import { Indicator } from 'mint-ui';
 					_this.$router.go(-1)
 			    })
 			},
-			delImg:function(index){
-				this.imgArr.splice(index,1);
-				this.imgData.splice(index,1);
-			},
 			imgUpload:function(){
 			    var reader = new FileReader();
 			    var that = this;
@@ -142,9 +155,6 @@ import { Indicator } from 'mint-ui';
 			this.formData = new FormData();
 		},
     	watch:{
-      		'pfNum':function () {
-
-      		}
     	}
 	}
 </script>

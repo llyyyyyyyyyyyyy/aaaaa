@@ -10,8 +10,13 @@ import 'swiper/dist/css/swiper.min.css'
 import 'animate.css'
 import Mint from 'mint-ui'
 import 'mint-ui/lib/style.css'
+import vuex from 'vuex'
+import store from './store/store.js'
+import VueAwesomeSwiper from 'vue-awesome-swiper'
 
 Vue.use(Mint)
+Vue.use(vuex)
+Vue.use(VueAwesomeSwiper)
 
 
 //axios
@@ -25,7 +30,7 @@ window.host = 'http://shunyi.sinacolour.com/wxcallback';
 window.debug = true;
 window.tool = {}
 window.tool.token = function() {
-	let token = localStorage.getItem('token')
+	let token = localStorage.getItem('sytoken')
 	if (!token || token === 'undefined') {
 		if (debug) {
 			return 'e288cdc4355f3704f8efaef76347b3df'
@@ -62,6 +67,7 @@ router.beforeEach((to, from, next) => {
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div id="info">
-            <div class="img-box">
+            <div class="img-box" @click="toPhoto">
                 <img :src="InfoData.top_img+'-Newdeer11.1080'" alt="">
             </div>
             <h2>{{InfoData.name}}</h2>
@@ -118,6 +118,7 @@
 import { Indicator } from 'mint-ui'
 import bigPic from './bigPic'
 import AMap from 'AMap'
+import { mapGetters, mapActions } from 'vuex'
 export default {
     data(){
         return{
@@ -132,6 +133,9 @@ export default {
             more:true
         }
     },
+    computed: {
+        ...mapGetters(['photo'])
+    },
     props:['id'],
     components: {
         'big-img':bigPic
@@ -139,11 +143,14 @@ export default {
      watch:{
       '$route':'getInfo'
   },
-    methods: {
+    methods: {        toPhoto(){
+            this.$router.push({path: '/photoPage'})
+        },
         picClick(Psrc){
             this.showImg = true
             this.imgSrc = Psrc;
             console.log(this.imgSrc)
+
         },
         mapClick(){
              this.$router.push({path:'/maplist/'+this.id})
@@ -240,9 +247,13 @@ export default {
         },
         //获取页面信息
         getInfo(){
+            var _this = this;
             this.$http.get('http://dev.shunyi.mydeertrip.com:83/scenic_spots/guide',{
-                params:{token:tool.token(),id:this.id
-                }}).then(res=>{
+                params:{id:this.id,token:tool.token()}
+            }).then(res=>{
+                    if (res.data.data.ss.imgList) {
+                        _this.$store.dispatch('fetch_photo',res.data.data.ss.imgList);
+                    }
                     this.loadmap(res.data.data.ss)
                     this.InfoData = res.data.data.ss
                     this.initSwiper()

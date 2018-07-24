@@ -101,6 +101,7 @@
   .loading(v-if="isPreloadingC",:class="{'first-loading':isFirstTIme}")
     div.double-bounce1
     div.double-bounce2
+  div.content(v-if="imgsArr.length==0") 暂无图片
 
 </template>
 
@@ -160,10 +161,10 @@ export default {
   },
   methods: {
     imgClick(src,i){
-      // console.log(i)
-      this.$publicData.photoImg = src;
-      this.$publicData.photoNum = i;
-      this.$router.push({path:'/photo'});
+      console.log(src,i)
+      // this.$publicData.photoImg = src;
+      // this.$publicData.photoNum = i;
+      this.$router.push({path:'/photo/'+i});
       // this.imgSrc = src;
       // console.log(this.imgSrc)
     },
@@ -220,7 +221,7 @@ export default {
 
     initColsHeightArr() { // 第一行元素的高度组成的数组-初始化
       this.colsHeightArr = [] // 列数发生变化重新初始化
-      for (var i = 0; i < this.columnCount; i++) {
+      for (var i = 0; i < this.imgBoxEls.length; i++) {
         this.imgBoxEls[i].style.position = 'static' // 重置下position
         var height = this.imgBoxEls[i].offsetHeight
         this.colsHeightArr.push(height)
@@ -231,7 +232,6 @@ export default {
     },
 
     initColumnCount() { // 列数初始化
-
       var winWidth = window.innerWidth
       var columnCount = parseInt(winWidth / this.colWidth)
       columnCount = columnCount === 0 ? 1 : columnCount
@@ -242,6 +242,9 @@ export default {
     },
   },
   mounted() {
+    if (this.imgsArr.length == 0) {
+      this.isPreloadingC = false;
+    }
     // ==1== 根据窗口大小初始化列数
     this.initColumnCount()
     this.beginIndex = this.columnCount // 开始排列的元素索引
