@@ -44,7 +44,8 @@ export default {
               localStorage.setItem('nickName', result.user.nickName);
               localStorage.setItem('personSign', result.user.personSign);
               localStorage.setItem('photo', result.user.photo || '');
-              _this.$router.replace('/');
+              // _this.$router.replace('/');
+              _this.$router.push({path: '/'})
               // if(tool.cookie.set('beforeLoginUrl')){
               //   _this.$router.replace(tool.cookie.set('beforeLoginUrl'));
               // }else{
