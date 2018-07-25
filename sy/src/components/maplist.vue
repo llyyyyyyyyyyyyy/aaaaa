@@ -156,7 +156,7 @@ export default {
 
             //加载对应信息窗体
             that.infoWindow = new AMap.InfoWindow({
-                offset: new AMap.Pixel(-10, 10),
+                offset: new AMap.Pixel(0, 10),
                 closeWhenClickMap:true,
                 isCustom:true
             });
