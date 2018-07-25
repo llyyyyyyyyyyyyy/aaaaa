@@ -7,7 +7,7 @@
                 <i v-for="(i,a) in n.natureList" :key="i.id" v-if="a<3"><span v-if="a > 0"> · </span>{{i.value}}</i>
             </h3>
             <div class="impression">
-                <p><span>活动亮点：</span>{{n.description150}}</p>
+                <p style="-webkit-box-orient: vertical"><span>活动亮点：</span>{{n.description150}}</p>
             </div>
         </div>
     </div>
@@ -75,6 +75,11 @@ export default {
     max-height: 0.54rem;
     overflow: hidden;
     margin: 0.06rem 0 0.3rem;
+    p{
+        display: -webkit-box;
+        // -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+    }
 }
 .impression span{
     color: #119DFF

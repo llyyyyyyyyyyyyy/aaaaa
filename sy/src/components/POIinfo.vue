@@ -504,7 +504,7 @@ main .unfold{
     img{
         width: 1.20rem;
         height: 1.20rem;
-        border-radius: 4px
+        border-radius: 0.04rem;
     }
     .name{
         font-weight: 900;
@@ -517,7 +517,7 @@ main .unfold{
     height: 1.09rem;
     width: 3.27rem;
     position: relative;
-    border-radius: 4px;
+    border-radius: 0.04rem;
     overflow: hidden;
     .shadow{
         height: 1.09rem;
