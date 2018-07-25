@@ -30,6 +30,7 @@
 			        	arr.push({ src: this.photo[i].img })
 			      	}
 		      	}
+		      	console.log(arr)
 		      	return arr
 		    },
 		  },
