@@ -251,9 +251,8 @@ export default {
             this.$http.get('http://dev.shunyi.mydeertrip.com:83/scenic_spots/guide',{
                 params:{id:this.id,token:tool.token()}
             }).then(res=>{
-                    if (res.data.data.ss.imgList) {
-                        _this.$store.dispatch('fetch_photo',res.data.data.ss.imgList);
-                    }
+                    var arr = res.data.data.ss.imgList || []
+                    this.$store.dispatch('fetch_photo',arr);
                     this.loadmap(res.data.data.ss)
                     this.InfoData = res.data.data.ss
                     this.initSwiper()
