@@ -44,12 +44,14 @@ export default {
 }
 .sceniccont{
     margin: 0.23rem auto;
-    width: 3.27rem
+    width: 3.27rem;
+    
 }
 .sceniccont img{
     height: 1.64rem;
     width: 3.27rem;
     background: #ccc;
+    border-radius: 4px;
 }
 .sceniccont h2{
     margin: 0.16rem 0 0.06rem;

@@ -5,7 +5,7 @@
                 <img :src="InfoData.top_img+'-Newdeer11.1080'" alt="">
             </div>
             <h2>{{InfoData.name}}</h2>
-            <h3><i v-for="(n,a) in InfoData.natureList" :key="n.id" ><span v-if="a>0"> · </span>{{n.value}}</i></h3>
+            <h3><i v-for="(n,a) in InfoData.natureList" :key="n.id" v-if="a<3"><span v-if="a>0"> · </span>{{n.value}}</i></h3>
         </div>
         <main>
             <div class="title">
@@ -16,7 +16,7 @@
                 <p><span>活动亮点：</span>{{InfoData.description150}}</p>
             </div>
             <div class="pSty intrp">
-                <p  :class="this.more ? 'moreP' : ''"><span>活动详情：</span>{{InfoData.guideIntro}}</p>
+                <p  :class="this.more ? 'moreP' : ''" style="-webkit-box-orient: vertical"><span>活动详情：</span>{{InfoData.guideIntro}}</p>
             </div>
             <div class="unfold" ref="unfold" @click="moreIntry" ><i v-if="this.more">查看更多</i><i v-if="!this.more">收起详情</i></div>
             <div class="title">
@@ -384,7 +384,7 @@ main .intrp{
     .moreP{
         height: 0.46rem;
         display: -webkit-box;
-        -webkit-box-orient: vertical;
+        // -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
         overflow: hidden;
     }
@@ -436,7 +436,8 @@ main .unfold{
     letter-spacing:0.03rem;
 }
 .practical .B i{
-    color: #119DFF
+    color: #119DFF;
+    word-wrap:break-word;
 }
 .comment{
     font-size:0.15rem;
