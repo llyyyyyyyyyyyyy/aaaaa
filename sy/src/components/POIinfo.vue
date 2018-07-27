@@ -109,6 +109,7 @@
                         <p>{{n.name}}</p>
                         <span>距离{{n.distanceStr}}km</span>
                     </div>
+                    <div class="swiper-slide last"></div>
                 </div>
             </div>
         </main>
@@ -431,8 +432,10 @@ main .unfold{
     border-radius: 2px;
     line-height: 0.2rem;
     z-index: 400;
-    text-align: center;
-    letter-spacing:0.03rem;
+    letter-spacing:0.04rem;
+    padding-left: 0.10rem;
+    box-sizing: border-box;
+    font-size: 0.1rem
 }
 .practical .B i{
     color: #119DFF;
@@ -498,6 +501,9 @@ main .unfold{
 .near{
         height: 2rem;
         color: #484848;
+        width: 3.51rem;
+        margin-left:-0.24rem;
+        padding-left:0.24rem;
     .contImg{
         width: 1.20rem;
     }
@@ -511,6 +517,9 @@ main .unfold{
     }
     .swiper-slide{
         width: 1.2rem !important
+    }
+    .last{
+        width: 0 !important
     }
 }
 .map{

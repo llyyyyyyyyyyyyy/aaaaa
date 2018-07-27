@@ -196,6 +196,7 @@ export default {
                 that.BMap.setZoom(13)
                 if(!that.infoWindow.getIsOpen()){
                     that.infoWindow.open(that.BMap, e.target.getPosition());
+                    setTimeout(()=>{that.mySwiper.slideTo(i)},100) 
                 }
             });
         }
@@ -269,7 +270,9 @@ export default {
             h4{
                 position: absolute;
                 bottom: 0.15rem;
-                left:0.2rem
+                left:0.2rem;
+                font-size: 0.17rem;
+                max-width: 2.87rem;
             }
             .shadow{
                 height: 1.1rem;
@@ -335,7 +338,6 @@ footer{
 </style>
 <style lang="scss">
 .mMarker{
-    // background:#EAC454;
     padding:0 0.12rem 0 0;
     border:1px solid #fff;
     border-radius: 0.18rem;

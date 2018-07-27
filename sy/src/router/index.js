@@ -8,6 +8,8 @@ import author from "../author.vue"
 import comment from '../components/comments/comments.vue'
 import photoPage from '../components/photoPage/photoPage.vue'
 import photo from '../components/photoPage/photo.vue'
+// const POIlist = () => import('../components/POIlist.vue')
+// const photo = () => import('../components/photoPage/photo.vue')
 
 Vue.use(Router)
 

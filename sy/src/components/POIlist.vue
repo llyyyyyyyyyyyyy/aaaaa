@@ -1,7 +1,7 @@
 <template>
     <div id="scenic">
         <div class="sceniccont" v-for="n in POIinfo" :key="n.id" @click="sceClick(n.id)">
-            <img :src="n.top_img+'-Newdeer21'" alt="">
+            <img :src="n.cover_img+'-Newdeer21'" alt="">
             <h2>{{n.name}}</h2>
             <h3>
                 <i v-for="(i,a) in n.natureList" :key="i.id" v-if="a<3"><span v-if="a > 0"> · </span>{{i.value}}</i>
