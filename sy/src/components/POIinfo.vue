@@ -249,7 +249,7 @@ export default {
         //获取页面信息
         getInfo(){
             var _this = this;
-            this.$http.get('http://dev.shunyi.mydeertrip.com:83/scenic_spots/guide',{
+            this.$http.get('http://mgmt.sinacolour.com:87/scenic_spots/guide',{
                 params:{id:this.id,token:tool.token()}
             }).then(res=>{
                     var arr = res.data.data.ss.imgList || []
@@ -265,14 +265,14 @@ export default {
         },
         //获取评论
         getComment(){
-            this.$http.get('http://dev.shunyi.mydeertrip.com:84/comment/list?itemId='+this.$route.params.id+'&isCream=2&qType=all&start=0&limit=1000&token='+tool.token()).then(res=>{
+            this.$http.get('http://mgmt.sinacolour.com:88/comment/list'+this.$route.params.id+'&isCream=2&qType=all&start=0&limit=1000&token='+tool.token()).then(res=>{
                     this.comment = res.data.data.list;
                    
             })
         },
         //获取附近景点
         getNear(){
-            this.$http.get('http://dev.shunyi.mydeertrip.com:83/scenic_spots/listNearbyss',{
+            this.$http.get('http://mgmt.sinacolour.com:87/scenic_spots/listNearbyss',{
                 params:{lat:this.InfoData.latitude,lon:this.InfoData.longitude,ssId:this.id}
             }).then(res=>{
                 this.nearData = res.data.data.list

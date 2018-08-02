@@ -125,7 +125,7 @@ import { Indicator } from 'mint-ui';
 				let config = {
             		headers:{'Content-Type':'multipart/form-data'}
 			    };  //添加请求头
-				this.$http.post('http://dev.shunyi.mydeertrip.com:84'+this.commentUrl, this.formData,config).then(function (res) {
+				this.$http.post('http://mgmt.sinacolour.com:88'+this.commentUrl, this.formData,config).then(function (res) {
 					if (res.data.code != '0') {
 						alert('评论失败！')
 					}
