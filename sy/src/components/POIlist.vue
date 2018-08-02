@@ -21,7 +21,7 @@ export default {
     },
     methods:{
         getData(){
-            this.$http.get('http://dev.shunyi.mydeertrip.com:83/plan/sslist',{
+            this.$http.get('http://mgmt.sinacolour.com:89/plan/sslist',{
                 params:{cursor:1,limit:100,regionIds:546
                 }}).then(res=>{
                 console.log(res.data.data.regionDetail[0].ssList)

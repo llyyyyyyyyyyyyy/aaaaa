@@ -13,6 +13,7 @@ import 'mint-ui/lib/style.css'
 import vuex from 'vuex'
 import store from './store/store.js'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
+import qs from 'qs'
 
 Vue.use(Mint)
 Vue.use(vuex)
@@ -21,7 +22,10 @@ Vue.use(VueAwesomeSwiper)
 
 //axios
 import axios from 'axios'
-Vue.prototype.$http = axios
+Vue.prototype.$http =  axios.create({
+  responseType: 'json',
+  withCredentials: false,
+})
 // Vue.use(Swiper)
 
 Vue.config.productionTip = false

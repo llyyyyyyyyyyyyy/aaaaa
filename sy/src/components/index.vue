@@ -83,7 +83,7 @@ export default {
         },
         //获取数据
         getData(){
-            this.$http.get('http://mgmt.sinacolour.com:87/plan/sslist',{
+            this.$http.get('http://mgmt.sinacolour.com:89/plan/sslist',{
                 params:{cursor:1,limit:100,regionIds:546
                 }}).then(res=>{
                 this.initSwiper()
