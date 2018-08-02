@@ -261,7 +261,7 @@ export default {
                     this.getNear()
                     console.log(res.data.data.ss)
                 })
-                // Indicator.close()
+                Indicator.close()
         },
         //获取评论
         getComment(){
