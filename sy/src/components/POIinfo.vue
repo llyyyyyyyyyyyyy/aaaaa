@@ -58,7 +58,7 @@
                 <h4 class="B" v-if="InfoData.guideWebsite">
                     <img src="../assets/img/网址@3x.png" alt="" style="height:0.15rem;width:0.14rem">
                     <span>网站</span>
-                    <a :href="InfoData.guideWebsite"><i>{{InfoData.guideWebsite}}</i></a>
+                    <a :href="'http'+'://'+InfoData.guideWebsite"><i>{{InfoData.guideWebsite}}</i></a>
                 </h4>
                 <h4 class="B" v-if="InfoData.guidePhone">
                     <img src="../assets/img/电话@3x.png" alt="" style="height:0.14rem;width:0.14rem"> 
@@ -265,9 +265,8 @@ export default {
         },
         //获取评论
         getComment(){
-            this.$http.get('http://mgmt.sinacolour.com:88/comment/list?'+this.$route.params.id+'&isCream=2&qType=all&start=0&limit=1000&token='+tool.token()).then(res=>{
+            this.$http.get('http://mgmt.sinacolour.com:88/comment/list?itemId='+this.$route.params.id+'&isCream=2&qType=all&start=0&limit=1000&token='+tool.token()).then(res=>{
                     this.comment = res.data.data.list;
-                   
             })
         },
         //获取附近景点
@@ -275,13 +274,17 @@ export default {
             this.$http.get('http://mgmt.sinacolour.com:89/scenic_spots/listNearbyss',{
                 params:{lat:this.InfoData.latitude,lon:this.InfoData.longitude,ssId:this.id}
             }).then(res=>{
+                console.log(this.InfoData.longitude)
+                console.log(this.InfoData.latitude)
+                console.log(this.id)
                 this.nearData = res.data.data.list
+                
+
             })
         },
          //展开内容
         moreIntry () {
             this.more = !this.more
-
         },
     },
     mounted(){

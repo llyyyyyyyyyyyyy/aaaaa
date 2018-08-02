@@ -8,24 +8,20 @@ import './stylesheets/_reset.scss'
 import './stylesheets/area.scss'
 import 'swiper/dist/css/swiper.min.css'
 import 'animate.css'
-import Mint from 'mint-ui'
+
 import 'mint-ui/lib/style.css'
 import vuex from 'vuex'
 import store from './store/store.js'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
-import qs from 'qs'
 
-Vue.use(Mint)
+
 Vue.use(vuex)
 Vue.use(VueAwesomeSwiper)
 
 
 //axios
 import axios from 'axios'
-Vue.prototype.$http =  axios.create({
-  responseType: 'json',
-  withCredentials: false,
-})
+Vue.prototype.$http =  axios
 // Vue.use(Swiper)
 
 Vue.config.productionTip = false
@@ -46,10 +42,10 @@ window.tool.token = function() {
 }
 
 router.beforeEach((to, from, next) => {
-	// tool.title((to.meta && to.meta.title) || '发现·海南')
 	if (!window.debug) {
 		if (tool.token()) {
 			if (to.path == '/author') {
+				console.log(3)
 				// 用户使用后退返回到授权页，则默认回到首页
 				next('/');
 				return false;
