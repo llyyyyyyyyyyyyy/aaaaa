@@ -33,7 +33,7 @@ window.tool.token = function() {
 	let token = localStorage.getItem('sytoken')
 	if (!token || token === 'undefined') {
 		if (debug) {
-			return 'e288cdc4355f3704f8efaef76347b3df'
+			return '6dbdb18664bca765bbb6add8bfad4c27'
 		}
 		// router.replace({ path: '/author' });
 		return false;

@@ -38,7 +38,7 @@ const router = new Router({
       props:true
     },
     {
-      path: '/comment/:name/',
+      path: '/comment/:name/:id',
       name: 'comment',
       component: comment,
       props:true
